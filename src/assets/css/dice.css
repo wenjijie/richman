@@ -1,0 +1,375 @@
+#big-dice {
+    perspective: 500px;
+    /*设置骰子被查看位置的视图（观察者与z=0平面的距离）：*/
+    -webkit-perspective: 500px;
+    -moz-perspective: 500px;
+    overflow: hidden;
+    display: none;
+    /* width: 600px; */
+    /* position: fixed; */
+    /* margin: auto; */
+}
+
+#small-dice {
+    perspective: 500px;
+    /*设置骰子被查看位置的视图（观察者与z=0平面的距离）：*/
+    -webkit-perspective: 500px;
+    -moz-perspective: 500px;
+    overflow: hidden;
+    /* display: none; */
+}
+
+#group {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    transform-style: preserve-3d;
+    /*使其子元素保持3D转换*/
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-origin: 50% 50% -100px;
+    /*设置骰子旋转的基点位置（骰子中心点）*/
+    -webkit-transform-origin: 50% 50% -100px;
+    -moz-transform-origin: 50% 50% -100px;
+    margin: 100px auto;
+    transform-animation: scroll 1s linear 0s infinite;
+    /*设置骰子动画效果*/
+    -webkit-animation: scroll 1s linear 0s infinite;
+    -moz-animation: scroll 1s linear 0s infinite;
+    background-color: #E8E8E9;
+    border-radius: 10%;
+}
+
+#group2 {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-origin: 50% 50% -25px;
+    -webkit-transform-origin: 50% 50% -25px;
+    -moz-transform-origin: 50% 50% -25px;
+    margin: 25% auto;
+    transform:  rotateX(-45deg) rotateY(45deg) rotateZ(90deg);
+    /* -webkit-animation: scroll 1s linear 0s infinite; */
+    background-color: #E8E8E9;
+    border-radius: 10%;
+}
+
+.page {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    border-radius: 10%;
+    text-align: center;
+    overflow: hidden;
+    text-align: center;
+    background-color: #E8E8E9;
+    border: 1px solid #E0E0E0;
+}
+
+.small-page {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    border-radius: 10%;
+    text-align: center;
+    overflow: hidden;
+    text-align: center;
+    background-color: #E8E8E9;
+    border: 1px solid #E0E0E0;
+}
+
+/*开始设置每个面的角度，将6个面拼成一个正方体*/
+#page1 {}
+
+#page2 {
+    transform-origin: right;
+    /*点数为2的面以右边为转轴转动*/
+    transform: rotateY(-90deg);
+    /*绕Y轴逆时针转动90度*/
+    -webkit-transform-origin: right;
+    -webkit-transform: rotateY(-90deg);
+    -moz-transform-origin: right;
+    -moz-transform: rotateY(-90deg);
+}
+
+#page3 {
+    transform-origin: left;
+    /*点数为3的面以左边为转轴转动*/
+    transform: rotateY(90deg);
+    /*绕Y轴顺时针转动90度*/
+    -webkit-transform-origin: left;
+    -webkit-transform: rotateY(90deg);
+    -moz-transform-origin: left;
+    -moz-transform: rotateY(90deg);
+}
+
+#page4 {
+    transform-origin: top;
+    /*点数为4的面以上边为转轴转动*/
+    transform: rotateX(-90deg);
+    /*绕X轴逆时针转动90度*/
+    -webkit-transform-origin: top;
+    -webkit-transform: rotateX(-90deg);
+    -moz-transform-origin: top;
+    -moz-transform: rotateX(-90deg);
+}
+
+#page5 {
+    transform-origin: bottom;
+    /*点数为5的面以下边为转轴转动*/
+    transform: rotateX(90deg);
+    /*绕X轴顺时针转动90度*/
+    -webkit-transform-origin: bottom;
+    -webkit-transform: rotateX(90deg);
+    -moz-transform-origin: bottom;
+    -moz-transform: rotateX(90deg);
+}
+
+#page6 {
+    transform: translateZ(-200px);
+    /*点数为6的面沿Z轴向后平移200px*/
+    -webkit-transform: translateZ(-200px);
+    -moz-transform: translateZ(-200px);
+}
+
+#small-page6 {
+    transform: translateZ(-50px); 
+    /*点数为6的面沿Z轴向后平移50px*/
+    -webkit-transform: translateZ(-50px);
+    -moz-transform: translateZ(-50px);
+}
+
+.page span {
+    display: inline-block;
+    width: 25%;
+    height: 25%;
+    border-radius: 50%;
+    background-color: #050505;
+    box-shadow: inset 2px 2px 3px #000;
+    /*骰子点数的阴影效果*/
+}
+
+.small-page span {
+    display: inline-block;
+    width: 25%;
+    height: 25%;
+    border-radius: 50%;
+    background-color: #050505;
+    box-shadow: inset 3px 3px 5px #000;
+    /*骰子点数的阴影效果*/
+}
+
+/*下面是对点数样式的控制*/
+
+#page1 span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -12.5%;
+    margin-left: -12.5%;
+    background-color: #f00;
+}
+
+#page2 span {
+    margin: 12.5% 12.5%;
+}
+
+#page3 span {
+    position: absolute;
+}
+
+#page3 span:first-child {
+    top: 10%;
+    left: 10%;
+}
+
+#page3 span:nth-child(2) {
+    top: 37.5%;
+    left: 37.5%;
+}
+
+#page3 span:last-child {
+    bottom: 10%;
+    right: 10%;
+}
+
+#page4 span {
+    position: absolute;
+}
+
+#page4 span:first-child {
+    top: 15%;
+    left: 15%;
+}
+
+#page4 span:nth-child(2) {
+    top: 15%;
+    right: 15%;
+}
+
+#page4 span:nth-child(3) {
+    bottom: 15%;
+    left: 15%;
+}
+
+#page4 span:last-child {
+    bottom: 15%;
+    right: 15%;
+}
+
+#page5 span {
+    position: absolute;
+}
+
+#page5 span:first-child {
+    top: 15%;
+    left: 15%;
+}
+
+#page5 span:nth-child(2) {
+    top: 15%;
+    right: 15%;
+}
+
+#page5 span:nth-child(3) {
+    bottom: 15%;
+    left: 15%;
+}
+
+#page5 span:nth-child(4) {
+    bottom: 15%;
+    right: 15%;
+}
+
+#page5 span:last-child {
+    top: 50%;
+    left: 50%;
+    margin-left: -12.5%;
+    margin-top: -12.5%;
+}
+
+#page6 span {
+    position: absolute;
+}
+
+#page6 span:first-child {
+    top: 5%;
+    left: 12.5%;
+}
+
+#page6 span:nth-child(2) {
+    top: 37.5%;
+    left: 12.5%;
+}
+
+#page6 span:nth-child(3) {
+    bottom: 5%;
+    left: 12.5%;
+}
+
+#page6 span:nth-child(4) {
+    top: 5%;
+    right: 12.5%;
+}
+
+#page6 span:nth-child(5) {
+    top: 37.5%;
+    right: 12.5%;
+}
+
+#page6 span:last-child {
+    bottom: 5%;
+    right: 12.5%;
+}
+
+#small-page6 span {
+    position: absolute;
+}
+
+#small-page6 span:first-child {
+    top: 5%;
+    left: 12.5%;
+}
+
+#small-page6 span:nth-child(2) {
+    top: 37.5%;
+    left: 12.5%;
+}
+
+#small-page6 span:nth-child(3) {
+    bottom: 5%;
+    left: 12.5%;
+}
+
+#small-page6 span:nth-child(4) {
+    top: 5%;
+    right: 12.5%;
+}
+
+#small-page6 span:nth-child(5) {
+    top: 37.5%;
+    right: 12.5%;
+}
+
+#small-page6 span:last-child {
+    bottom: 5%;
+    right: 12.5%;
+}
+
+/*设置骰子具体动画效果 确保骰子的每个面都可以看到，后面会运动快一些*/
+@keyframes scroll {
+    0% {
+        transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);
+    }
+    25% {
+        transform: rotateY(0deg) rotateX(90deg) rotateZ(90deg);
+    }
+    50% {
+        transform: rotateY(0deg) rotateX(180deg) rotateZ(180deg);
+    }
+    75% {
+        transform: rotateY(180deg) rotateX(270deg) rotateZ(270deg);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(360deg) rotateZ(360deg);
+    }
+}
+
+@-moz-keyframes scroll {
+    0% {
+        -moz-transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);
+    }
+    25% {
+        -moz-transform: rotateY(0deg) rotateX(90deg) rotateZ(90deg);
+    }
+    50% {
+        -moz-transform: rotateY(0deg) rotateX(180deg) rotateZ(180deg);
+    }
+    75% {
+        -moz-transform: rotateY(180deg) rotateX(270deg) rotateZ(270deg);
+    }
+    100% {
+        -moz-transform: rotateY(360deg) rotateX(360deg) rotateZ(360deg);
+    }
+}
+
+@-webkit-keyframes scroll {
+    0% {
+        -webkit-transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);
+    }
+    25% {
+        -webkit-transform: rotateY(0deg) rotateX(90deg) rotateZ(90deg);
+    }
+    50% {
+        -webkit-transform: rotateY(0deg) rotateX(180deg) rotateZ(180deg);
+    }
+    75% {
+        -webkit-transform: rotateY(180deg) rotateX(270deg) rotateZ(270deg);
+    }
+    100% {
+        -webkit-transform: rotateY(360deg) rotateX(360deg) rotateZ(360deg);
+    }
+}
