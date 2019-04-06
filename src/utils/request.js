@@ -32,11 +32,11 @@ service.interceptors.response.use(
      */
     const res = response.data
     if (res.errno !== 1000 && res.status !== 0 && res.status !== 200) {
-      Message({
-        message: res.errmsg,
-        type: 'error',
-        duration: 5 * 1000
-      })
+      // Message({
+      //   message: res.errmsg,
+      //   type: 'error',
+      //   duration: 5 * 1000
+      // })
 
       // 1010:token缺失; 1012:查无此token;  1014:token不匹配;
       if (res.errno === 1010 || res.errno === 1012 || res.errno === 1014) {
@@ -47,7 +47,7 @@ service.interceptors.response.use(
         router.push({ path: '/login' })
         return Promise.reject('登录认证失败')
       }
-      return Promise.reject('出现错误')
+      return response.data
     } else {
       return response.data
     }

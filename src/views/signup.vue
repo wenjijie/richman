@@ -139,10 +139,13 @@ export default {
   methods: {
     handleSignup() {
       this.loading = true;
-      user.signup(this.loginForm)
+      user
+        .signup(this.loginForm)
         .then(res => {
+          if (res.errno === 1000) {
+            this.$router.push({ path: "/login" });
+          }
           this.loading = false;
-          this.$router.push({ path: "/login" });
         })
         .catch(e => {
           this.loading = false;

@@ -4,17 +4,18 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueSocketIO from 'vue-socket.io'
+// import socketio from 'socket.io-client';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
-// let socket = new VueSocketIO({ connection: 'http://localhost:7008'})
-// Vue.use(socket)
-// Vue.prototype.$websocket = new VueSocketIO({ connection: 'http://localhost:7008'});
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: 'http://localhost:7008',
+  // connection: 'http://localhost:7008',
+  connection: 'http://richman.qiuluo.xin',
+  // connection: 'http://richman.qiuluo.xin/api',
+  // connection: 'http://richman.qiuluo.xin:7008',
   vuex: {
     // store,
     // actionPrefix: 'SOCKET_',

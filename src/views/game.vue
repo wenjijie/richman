@@ -1,631 +1,644 @@
 <template>
   <div id="appself">
-    <div id="bg">
-      <!-- <div id="player" class="player" style="width: 8.33%;height: 15%;position: fixed;/* margin-left: 91.67%; */margin-bottom: 0%;"><div>玩家一</div><img src="/static/img/player.png" class="playerImg" alt="玩家"></div> -->
-      <div id="top">
-        <div class="row-room">北极</div>
-        <div class="row-room">芬兰<br>$3200</div>
-        <div class="row-room">丹麦<br>$2800</div>
-        <div class="row-room">意大利<br>$1400</div>
-        <div class="row-room" style="color:yellow">命运</div>
-        <div class="row-room">西班牙<br>$1400</div>
-        <div class="row-room">埃及<br>$1800</div>
-        <div class="row-room">赞比亚<br>$600</div>
-        <div class="row-room" style="color:red">机会</div>
-        <div class="row-room">加拿大<br>$3500</div>
-        <div class="row-room">美国<br>$3500</div>
-        <div class="row-room" style="color:blue">监狱</div>
-      </div>
-
-      <div id="middle">
-        <div id="middle-left">
-          <div class="col-room">英国<br>$2200</div>
-          <div class="col-room" style="color:red">机会</div>
-          <div class="col-room">俄罗斯<br>$1000</div>
-          <div class="col-room" style="color:yellow">命运</div>
-          <div class="col-room">土耳其<br>$3500</div>
-        </div>
-        <div id="middle-middle">
-
-          <!-- 骰子 -->
-          <div id="big-dice">
-            <div id="group">
-              <div class="page" id="page1">
-                <span></span>
-              </div>
-              <div class="page" id="page2">
-                <span></span>
-                <span></span>
-              </div>
-              <div class="page" id="page3">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="page" id="page4">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="page" id="page5">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="page" id="page6">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 小骰子 -->
-          <div id="small-dice">
-            <div id="group2">
-              <div class="small-page" id="page1">
-                <span></span>
-              </div>
-              <div class="small-page" id="page2">
-                <span></span>
-                <span></span>
-              </div>
-              <div class="small-page" id="page3">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="small-page" id="page4">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="small-page" id="page5">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="small-page" id="small-page6">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
-          <div id="throw_dice">
-            <button @click="run(1)">掷骰子</button>
-          </div>
-        </div>
-        <div id="middle-right">
-          <div class="col-room">墨西哥<br>$1000</div>
-          <div class="col-room" style="color:yellow"
-          >命运</div>
-          <div class="col-room">巴拿马<br>$3200</div>
-          <div class="col-room">巴西<br>$2600</div>
-          <div class="col-room">澳大利亚<br>$3200</div>
+    <div id="gamePanel">
+      <!-- <div>我：{{myname}}</div> -->
+      <!-- 倒计时 -->
+      <div id="countDown">
+        <div id="countDownNum" v-show="countDown.visible">
+          {{this.countDown.num}}
         </div>
       </div>
+      <div id="bg">
+        <div id="top">
+          <div id="room-17" class="row-room"></div>
+          <div id="room-18" class="row-room"></div>
+          <div id="room-19" class="row-room"></div>
+          <div id="room-20" class="row-room"></div>
+          <div id="room-21" class="row-room"></div>
+          <div id="room-22" class="row-room"></div>
+          <div id="room-23" class="row-room"></div>
+          <div id="room-24" class="row-room"></div>
+          <div id="room-25" class="row-room"></div>
+          <div id="room-26" class="row-room"></div>
+          <div id="room-27" class="row-room"></div>
+          <div id="room-28" class="row-room"></div>
+          <!-- <div class="row-room" style="color:blue">监狱</div> -->
+        </div>
 
-      <div id="bottom">
-        <div class="row-room" style="color:blue">监狱</div>
-        <div class="row-room">叙利亚<br>$3500</div>
-        <div class="row-room">沙特阿拉伯<br>$1800</div>
-        <div class="row-room">伊朗<br>$2000</div>
-        <div class="row-room">太平洋</div>
-        <div class="row-room">印度<br>$1400</div>
-        <div class="row-room">菲律宾<br>$600</div>
-        <div class="row-room">韩国<br>$1000</div>
-        <div class="row-room" style="color:red">机会</div>
-        <div class="row-room">日本<br>$1000</div>
-        <div class="row-room">中国<br>$4000</div>
-        <div class="row-room" id="start">
-          起点
-          <!-- <div>玩家一</div>
-          <img src="/static/img/player.png" id="player" alt="玩家"> -->
+        <div id="middle">
+          <div id="middle-left">
+            <div id="room-16" class="col-room"></div>
+            <div id="room-15" class="col-room"></div>
+            <div id="room-14" class="col-room"></div>
+            <div id="room-13" class="col-room"></div>
+            <div id="room-12" class="col-room"></div>
+          </div>
+          <div id="middle-middle">
+
+            <!-- 骰子 -->
+            <div id="big-dice">
+              <div id="group">
+                <div class="page" id="page1">
+                  <span></span>
+                </div>
+                <div class="page" id="page2">
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="page" id="page3">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="page" id="page4">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="page" id="page5">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="page" id="page6">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 小骰子 -->
+            <div id="small-dice">
+              <div id="group2">
+                <div class="small-page" id="page1">
+                  <span></span>
+                </div>
+                <div class="small-page" id="page2">
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="small-page" id="page3">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="small-page" id="page4">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="small-page" id="page5">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="small-page" id="small-page6">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+            <div id="throw_dice" v-if="roomInfo.roomStatus === '游戏中'">
+              <button @click="getCurrentAreas()">出售</button>
+              <button @click="throwDice()" :disabled="diceButton">掷骰子</button>
+            </div>
+            <div id="throw_dice" v-else-if="roomInfo.roomStatus === '等待' && roomInfo.owner === currentPlayer">
+              <button @click="startGame()">开始</button>
+            </div>
+            <div id="throw_dice" v-else-if="roomInfo.roomStatus === '等待' && roomInfo.owner !== currentPlayer">
+              请等待房主开始游戏
+            </div>
+          </div>
+          <div id="middle-right">
+            <div id="room-29" class="col-room"></div>
+            <div id="room-30" class="col-room"></div>
+            <div id="room-31" class="col-room"></div>
+            <div id="room-32" class="col-room"></div>
+            <div id="room-33" class="col-room"></div>
+          </div>
+        </div>
+
+        <div id="bottom">
+          <!-- <div class="row-room" style="color:blue">监狱</div> -->
+          <div id="room-11" class="row-room"></div>
+          <div id="room-10" class="row-room"></div>
+          <div id="room-9" class="row-room"></div>
+          <div id="room-8" class="row-room"></div>
+          <div id="room-7" class="row-room"></div>
+          <div id="room-6" class="row-room"></div>
+          <div id="room-5" class="row-room"></div>
+          <div id="room-4" class="row-room"></div>
+          <div id="room-3" class="row-room"></div>
+          <div id="room-2" class="row-room"></div>
+          <div id="room-1" class="row-room"></div>
+          <div id="room-0" class="row-room"></div>
         </div>
       </div>
     </div>
+    
     <div id="info">
-      <!-- <div id="playerInfo" v-for="player in players">
-        
-      </div> -->
+      <div id="playerInfo" >
+        <!-- <div v-for="player in players" v-bind="player._id">
+          <div class="user">
+            <div class="userColor"></div>
+            <div class="userName">{{player.username}}</div>
+            <div class="money">{{player.money}}</div>
+          </div>
+        </div> -->
+        <table class="user">
+          <tr>
+            <td class="user-title"></td>
+            <td class="user-title">颜色</td>
+            <td class="user-title">昵称</td>
+            <td class="user-title">金钱</td>
+          </tr>
+          <tr v-for="(player, id) in players" :key="player._id">
+            <th><div v-if="id === currentRound" class="userColor" :style="'background-color:'+player.color"></div></th>
+            <th><div class="userColor" :style="'background-color:'+player.color"></div></th>
+            <th class="userName">{{player.username}}</th>
+            <th class="money">{{player.money}}</th>
+          </tr>
+        </table>
+        <!-- <el-table :data="players">
+          <el-table-column label="颜色" align="center" prop="apiname"/>
+          <el-table-column label="名称" align="center" prop="username"/>
+          <el-table-column label="金钱" align="center" prop="money"/>
+        </el-table> -->
+      </div> 
       <div id="gameInfo">
-
+        <pre id="console" style="margin: 0"></pre>
       </div>
-      <!-- <div>玩家一：{{players.player1.money}}</div> -->
     </div>
+    <!-- 够买升级 -->
     <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
+      :title="buyDialog.title"
+      :visible.sync="buyDialog.dialogVisible"
       width="30%">
-      <span>{{dialogText}}</span>
+      <span>{{buyDialog.dialogText}}</span>
+      <br>
+      <span>{{buyDialog.price}}</span>
       <span slot="footer" class="dialog-footer" style="text-align:center;">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="buy()">确 定</el-button>
+        <el-button @click="buy(false)">取 消</el-button>
+        <el-button type="primary" @click="buy(true)">确 定</el-button>
       </span>
+    </el-dialog>
+    <!-- 出售 -->
+    <el-dialog
+      :title="saleDialog.title"
+      :visible.sync="saleDialog.visible">
+      <div v-show="saleDialog.moneyTextVisible">{{saleDialog.moneyText}}</div>
+      <!-- <el-table :data="saleDialog.areas" height="(document.getElementById('gamePanel')).offsetHeight)"> -->
+      <el-table :data="saleDialog.areas" max-height="400">
+        <el-table-column property="country" label="地区"></el-table-column>
+        <el-table-column property="rank" label="房屋数"></el-table-column>
+        <el-table-column property="price" label="地皮所得"></el-table-column>
+        <el-table-column property="upgradePrice" label="房屋单价"></el-table-column>
+        <el-table-column property="total" label="总价"></el-table-column>
+        <el-table-column
+          label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="saleHouse(scope.$index, scope.row)">出售一级</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+    <!-- 机会、命运提示 -->
+    <el-dialog
+      :title="tipDialog.title"
+      :visible.sync="tipDialog.dialogVisible"
+      width="30%">
+      <span>{{tipDialog.dialogText}}</span>
+      <!-- <span slot="footer" class="dialog-footer" style="text-align:center;">
+        <el-button @click="buy(false)">取 消</el-button>
+        <el-button type="primary" @click="buy(true)">确 定</el-button>
+      </span> -->
     </el-dialog>
   </div>
 </template>
 
+<script src="../assets/js/socket.io.js"></script>
+
 <script>
 import user from "@/api/user";
 import game from "@/api/game";
-// const io = require('vue-socket.io')
+import { Message } from "element-ui";
+// import io from 'socket.io';
+// const io = require('../assets/js/socket.io')
 
 export default {
   name: "App",
   data() {
     return {
+      roomId: "",
+      diceButton: false,
       playerNum: 1,
+      myname: "",
       currentPlayer: "",
-      players: {
-        player1: {
-          step: 0,
-          money: 15000,
-          position: {
-            x: 91.67,
-            y: 85.815
-          }
-        }
+      currentRound: "", // 当前轮到的玩家
+      currentStatus: "dice", // 等待掷骰子(dice)、等待玩家操作(oper)
+      roomInfo: {
+        roomStatus: "等待中",
+        owner: ""
       },
-      // players: [],
+      // players: {
+      //   player1: {
+      //     step: 0,
+      //     money: 15000,
+      //     position: {
+      //       x: 91.67,
+      //       y: 85.815
+      //     }
+      //   }
+      // },
+      players: {},
       // socket: "",
-      dialogVisible: false,
-      dialogText: "是否够买",
-      country: {
-        0: {
-          type: "start",
-          country: "起点",
-          price: 0
-        },
-        1: {
-          type: "place",
-          country: "中国",
-          price: 4000
-        },
-        2: {
-          type: "place",
-          country: "日本",
-          price: 1000
-        },
-        3: {
-          type: "chance",
-          country: "机会",
-          price: 0
-        },
-        4: {
-          type: "place",
-          country: "韩国",
-          price: 1000
-        },
-        5: {
-          type: "place",
-          country: "菲律宾",
-          price: 600
-        },
-        6: {
-          type: "place",
-          country: "印度",
-          price: 1400
-        },
-        7: {
-          type: "ocean",
-          country: "太平洋",
-          price: 0
-        },
-        8: {
-          type: "place",
-          country: "伊朗",
-          price: 2000
-        },
-        9: {
-          type: "place",
-          country: "沙特阿拉伯",
-          price: 1800
-        },
-        10: {
-          type: "place",
-          country: "叙利亚",
-          price: 3500
-        },
-        11: {
-          type: "prison",
-          country: "监狱",
-          price: 0
-        },
-        12: {
-          type: "place",
-          country: "土耳其",
-          price: 3500
-        },
-        13: {
-          type: "fate",
-          country: "命运",
-          price: 0
-        },
-        14: {
-          type: "place",
-          country: "俄罗斯",
-          price: 1000
-        },
-        15: {
-          type: "chance",
-          country: "机会",
-          price: 0
-        },
-        16: {
-          type: "place",
-          country: "英国",
-          price: 2200
-        },
-        17: {
-          type: "ocean",
-          country: "北极",
-          price: 0
-        },
-        18: {
-          type: "place",
-          country: "芬兰",
-          price: 3200
-        },
-        19: {
-          type: "place",
-          country: "丹麦",
-          price: 2800
-        },
-        20: {
-          type: "place",
-          country: "意大利",
-          price: 1400
-        },
-        21: {
-          type: "fate",
-          country: "命运",
-          price: 0
-        },
-        22: {
-          type: "place",
-          country: "西班牙",
-          price: 1400
-        },
-        23: {
-          type: "place",
-          country: "埃及",
-          price: 1800
-        },
-        24: {
-          type: "place",
-          country: "赞比亚",
-          price: 600
-        },
-        25: {
-          type: "chance",
-          country: "机会",
-          price: 0
-        },
-        26: {
-          type: "place",
-          country: "加拿大",
-          price: 3500
-        },
-        27: {
-          type: "place",
-          country: "美国",
-          price: 3500
-        },
-        28: {
-          type: "prison",
-          country: "监狱",
-          price: 0
-        },
-        29: {
-          type: "place",
-          country: "墨西哥",
-          price: 1000
-        },
-        30: {
-          type: "fate",
-          country: "命运",
-          price: 0
-        },
-        31: {
-          type: "place",
-          country: "巴拿马",
-          price: 3200
-        },
-        32: {
-          type: "place",
-          country: "巴西",
-          price: 2600
-        },
-        33: {
-          type: "place",
-          country: "澳大利亚",
-          price: 3200
-        }
+      diceMsg: {},
+      buyDialog: {
+        title: "提示",
+        dialogVisible: false,
+        dialogText: "是否够买",
+        price: 0
       },
-      fates: {
-        1: {
-          text: "破获泰北毒品走私案",
-          result: "奖金1000元",
-          effect: 1000
-        },
-        2: {
-          text: "金字塔内，寻得宝藏",
-          result: "得2000元",
-          effect: 2000
-        },
-        3: {
-          text: "遭受原子弹轰炸",
-          result: "损失500元",
-          effect: -500
-        },
-        4: {
-          text: "吃韩国烧烤",
-          result: "付200元",
-          effect: -200
-        },
-        5: {
-          text: "跳西班牙舞、舞姿美妙",
-          result: "前进二步", // 得200元
-          effect: 200
-        },
-        6: {
-          text: "畅游狄斯尼乐园",
-          result: "门票200元",
-          effect: -200
-        },
-        7: {
-          text: "进入影城，好莱坞当明星",
-          result: "得1000元",
-          effect: 1000
-        },
-        8: {
-          text: "梦见埃及艳后",
-          result: "赏赐500元",
-          effect: 500
-        },
-        9: {
-          text: "泛莱茵河",
-          result: "船租金1000",
-          effect: -1000
-        },
-        10: {
-          text: "衡越英吉利海峡",
-          result: "精神奖励1000元",
-          effect: 1000
-        },
-        11: {
-          text: "击落战斗机",
-          result: "得奖金300元",
-          effect: 3000
-        },
-        12: {
-          text: "环游世界、第一天晕船",
-          result: "暂停一次",
-          effect: 0
-        },
-        13: {
-          text: "付户税",
-          result: "房屋每幢250元\n旅馆每幢1000元",
-          effect: 0
-        },
-        14: {
-          text: "到夏威夷度假",
-          result: "如经过起点得2000元",
-          effect: 0
-        },
-        15: {
-          text: "与木乃伊合照冲洗相片",
-          result: "费用300元",
-          effect: -300
-        },
-        16: {
-          text: "登喜马拉雅山成功",
-          result: "奖励金1000元",
-          effect: 1000
-        },
-        17: {
-          text: "参加世界小姐选美",
-          result: "奖金500元",
-          effect: 500
-        },
-        18: {
-          text: "飞机跌落太平洋",
-          result: "退回起点",
-          effect: 0
-        },
-        19: {
-          text: "渴死在撒哈拉沙漠",
-          result: "得救济金1000元",
-          effect: 1000
-        },
-        20: {
-          text: "进入银月城，维也纳",
-          result: "付学费1000元",
-          effect: -1000
-        }
+      saleDialog: {
+        title: "出售房屋",
+        visible: false,
+        areas: [],
+        moneyText: "需支付1000元",
+        moneyTextVisible: false
       },
-      chances: {
-        1: {
-          text: "畅游尼加拉瓜",
-          result: "可在翻下一张机会",
-          effect: 0
-        },
-        2: {
-          text: "直飞美国、会见白马王子从事政治",
-          result: "如经过起点得2000元",
-          effect: 2000
-        },
-        3: {
-          text: "为登月第一人",
-          result: "得500元",
-          effect: 500
-        },
-        4: {
-          text: "观赏西班牙斗牛",
-          result: "门票200分",
-          effect: -200
-        },
-        5: {
-          text: "太空船故障",
-          result: "时区所有现金1/10",
-          effect: 0
-        },
-        6: {
-          text: "巴黎铁塔一日游",
-          result: "买香水1000元",
-          effect: -1000
-        },
-        7: {
-          text: "能源危机解除，经济复苏",
-          result: "获利2500元",
-          effect: 2500
-        },
-        8: {
-          text: "破奥运会记录",
-          result: "得奖金2000元",
-          effect: 2000
-        },
-        9: {
-          text: "荣获诺贝尔奖金",
-          result: "得3000元",
-          effect: 3000
-        },
-        10: {
-          text: "误入食人族",
-          result: "损失600元",
-          effect: -600
-        },
-        11: {
-          text: "飞机失事（美国大峡谷）",
-          result: "损失1000元",
-          effect: -1000
-        },
-        12: {
-          text: "经过梵蒂冈，拜见教宗",
-          result: "得1000元",
-          effect: 1000
-        },
-        13: {
-          text: "变魔术，自由女神像不见了",
-          result: "酬劳2000元",
-          effect: 2000
-        },
-        14: {
-          text: "付户说",
-          result: "房屋每幢250元\n旅馆每幢1000元",
-          effect: 0
-        },
-        15: {
-          text: "拉斯维加斯赌博，现金输光",
-          result: "每人救济1000元",
-          effect: 0
-        },
-        16: {
-          text: "探险被人面兽身怪兽侵袭",
-          result: "损失300元",
-          effect: -300
-        },
-        17: {
-          text: "英国女王接见",
-          result: "赏500元",
-          effect: 500
-        },
-        18: {
-          text: "载游客游览尼罗河风光",
-          result: "得300分",
-          effect: 300
-        },
-        19: {
-          text: "越南沦亡",
-          result: "退回起点",
-          effect: 0
-        },
-        20: {
-          text: "违章建筑",
-          result: "罚款500元",
-          effect: -500
-        }
-      }
+      tipDialog: {
+        title: "机会",
+        dialogVisible: false,
+        dialogText: ""
+      },
+      countDown: {
+        num: 0,
+        visible: false
+      },
+      area: {}
     };
   },
   created() {
     // console.log(this.$websocket,"websocket")
   },
   mounted() {
-    // 创建玩家
-    // let player = document.createElement("div");
-    // player.id = "player";
-    // player.className = "player";
-    // let name = document.createElement("div");
-    // // name.textContent = "玩家一";
-    // name.style.height = "25px";
-    // player.appendChild(name);
-    // let img = document.createElement("img");
-    // img.src = "/static/img/player.png";
-    // img.className = "playerImg";
-    // img.alt = "玩家";
-    // player.appendChild(img);
-    // player.style.width = "8.33%";
-    // player.style.height = "15%";
-    // player.style.position = "absolute";
-    // player.style.left = "91.67%";
-    // player.style.top = "85.815%";
-    // document
-    //   .getElementById("bg")
-    //   .insertBefore(player, document.getElementById("top"));
-
-    // document.getElementById("bg").appendChild(player);
-
-    // 加入房间
-    // 连接websocket
-    // console.log('socket: ', this.$socket)
-    // const io =require();
-    // // this.socket = io("ws://localhost:7008/", {
-    // //   // const socket = io('ws://www.pxiou.club/', {
-    // //   transports: ["websocket"]
-    // // });
-    this.$socket.on("connect", () => {
-      // const id = socket.id;
-      console.log("#connect");
-    });
     // this.$socket.emit("test", {
     //   token: localStorage.richman_token,
-    //   name: "336",
+    //   name: '336',
     //   max: 8
     // });
-    this.$socket.emit("joinRoom", {
-      token: localStorage.richman_token,
-      roomId: "richman-room-336"
-    });
-    this.$socket.on("richman-room-336", msg => {
-      // const id = socket.id;
-      console.log("来自336的消息： " + msg);
-    });
+    this.roomId = this.$route.query.roomId;
 
+    // 加入房间
+    // this.$socket.emit("joinRoom", {
+    //   token: localStorage.richman_token,
+    //   roomId: this.roomId
+    // });
     this.getCurrentPlayer();
+
+    // 订阅websocket消息
+    this.socketMessage();
   },
   methods: {
+    socketMessage() {
+      // 接受广播的骰子消息
+      this.sockets.subscribe(this.roomId + "-throwDiceBack", msg => {
+        console.log("骰子消息： ", msg);
+        this.diceMsg = msg;
+        this.currentRound = msg.nextPlayer;
+
+        // 轮到当前用户时投掷按钮可用
+        if (
+          msg.result != "buy" &&
+          msg.result != "upgrade" &&
+          this.currentPlayer === msg.nextPlayer
+        ) {
+          if (this.currentPlayer === msg.nextPlayer) {
+            this.diceButton = false;
+          }
+        }
+        if (
+          msg.result === "run" ||
+          msg.result === "buy" ||
+          msg.result === "upgrade" ||
+          msg.result === "pay"
+        ) {
+          // if (msg.area.type === "chance" || msg.area.type === "fate") {
+          //   // 机会或命运
+          //   this.tipDialog.title = msg.effect.text;
+          //   this.tipDialog.dialogText = msg.effect.result;
+          //   this.tipDialog.dialogVisible = true;
+          //   this.players[msg._id].money += msg.effect.effect;
+
+          //   setTimeout(() => {
+          //     this.tipDialog.dialogVisible = false;
+          //   }, 3000);
+          //   // Message({
+          //   //   message: msg.effect.text,
+          //   //   type: "warning",
+          //   //   duration: 5 * 1000
+          //   // });
+          // } else if (msg.area.type === "prison") {
+          // }
+          this.players[msg._id].area = msg.area;
+          this.run(msg._id, msg.step);
+        } else if (msg.result === "noRound") {
+          if (msg._id === this.currentPlayer) {
+            Message({
+              message: "还没到你",
+              type: "warning",
+              duration: 5 * 1000
+            });
+          }
+        } else if (msg.result === "needSaleHouse") {
+          this.players[msg._id].area = msg.area;
+          this.run(msg._id, msg.step);
+        }
+
+        if (msg.throughStart) {
+          this.players[msg._id].price += 2000;
+        }
+      });
+
+      // 接受广播的够买地区消息
+      this.sockets.subscribe(this.roomId + "-buyAreaBack", msg => {
+        console.log("够买消息： ", msg);
+        let area = document.getElementById(
+          "room-" + this.players[msg._id].step
+        );
+
+        console.log("area1: ", area);
+        if (msg.result === "buy") {
+          this.players[msg._id].money = msg.money;
+
+          area.style.backgroundColor = this.players[msg._id].color;
+          let houseImg = document.createElement("img");
+          houseImg.src = "/static/img/house.png";
+          houseImg.style.width = "20%";
+          area.innerHTML =
+            msg.area.country + "<br>$" + msg.area.price + "<br>" + 0 + " X ";
+          console.log(houseImg);
+          area.appendChild(houseImg);
+
+          Message({
+            message:
+              this.players[msg._id].username + " 够买了 " + msg.area.country,
+            type: "message",
+            duration: 5 * 1000
+          });
+        } else if (msg.result === "upgrade") {
+          this.players[msg._id].money = msg.money;
+          // let room = document.getElementById("room-" + i);
+          let houseImg = document.createElement("img");
+          houseImg.src = "/static/img/house.png";
+          houseImg.style.width = "20%";
+          console.log("area: ", area);
+          area.innerHTML =
+            msg.area.country +
+            "<br>$" +
+            msg.area.price +
+            "<br>" +
+            (Number(msg.area.rank) - 1) +
+            " X ";
+          console.log(houseImg);
+          area.appendChild(houseImg);
+
+          Message({
+            message: "升级成功",
+            type: "message",
+            duration: 5 * 1000
+          });
+        } else if (msg.result === "noMoney") {
+          Message({
+            message: "金钱不足",
+            type: "warning",
+            duration: 5 * 1000
+          });
+        } else if (msg.result === "isBought") {
+          Message({
+            message: "已被人够买，不能再买",
+            type: "warning",
+            duration: 5 * 1000
+          });
+        } else if (msg.result === "noRound") {
+          Message({
+            message: "还没到你",
+            type: "warning",
+            duration: 5 * 1000
+          });
+        }
+        this.currentRound = msg.nextPlayer;
+        // 轮到当前用户时投掷按钮可用
+        if (this.currentPlayer === msg.nextPlayer) {
+          this.diceButton = false;
+        }
+
+        // this.players[this.currentPlayer].money -= this.country[
+        //   this.players[this.currentPlayer].step
+        // ].price;
+        this.countDown.visible = false;
+        this.buyDialog.dialogVisible = false;
+        // this.run(msg._id, msg.step);
+      });
+
+      // 接受破产消息
+      this.sockets.subscribe(this.roomId + "-bankrupt", msg => {
+        console.log("破产： ", msg);
+        Message({
+          message: this.players[msg._id].username + " 破产了",
+          type: "warning",
+          duration: 5 * 1000
+        });
+      });
+
+      // 游戏开始消息
+      this.sockets.subscribe(this.roomId + "-startGameBack", msg => {
+        console.log("游戏开始： ", msg);
+        if (msg.type === "start") {
+          Message({
+            message: "游戏开始",
+            type: "message",
+            duration: 5 * 1000
+          });
+          this.roomInfo.roomStatus = "游戏中";
+          // this.getRoomUsers();
+        }
+      });
+
+      // 加入游戏消息
+      this.sockets.subscribe(this.roomId + "-joinRoomBack", msg => {
+        console.log("加入游戏： ", msg);
+        if (msg.type === "join") {
+          this.getRoomUsers();
+        }
+        Message({
+          message:
+            msg.user.username +
+            (msg.type === "join" ? " 加入游戏" : " 返回游戏"),
+          type: "message",
+          duration: 5 * 1000
+        });
+      });
+
+      // 倒计时
+      this.sockets.subscribe(this.roomId + "-countDown", msg => {
+        console.log("倒计时： ", msg);
+        this.countDown.num = msg.countDown;
+        this.countDown.visible = true;
+
+        if (msg.countDown == 0) {
+          this.countDown.visible = false;
+          this.buyDialog.dialogVisible = false;
+        }
+      });
+
+      // 切换当前玩家
+      this.sockets.subscribe(this.roomId + "-currentRound", msg => {
+        console.log("切换玩家： ", msg);
+        this.currentRound = msg.nextPlayer;
+        // 轮到当前用户时投掷按钮可用
+        if (this.currentPlayer === msg.nextPlayer) {
+          this.diceButton = false;
+        }
+      });
+
+      // 出售房屋
+      this.sockets.subscribe(this.roomId + "-saleHouseBack", msg => {
+        console.log("出售房屋： ", msg);
+        console.log("ss: ", this.saleDialog.areas);
+        if (msg.result == "place" || msg.result == "house") {
+          Message({
+            message:
+              msg.username +
+              " 出售了 " +
+              msg.area.country +
+              (msg.result == "place" ? "的一间房子" : ""),
+            type: "message",
+            duration: 5 * 1000
+          });
+          this.players[msg._id].money = msg.money;
+
+          let area = document.getElementById("room-" + msg.houseId);
+          if (msg.result == "place") {
+            area.innerHTML = msg.area.country + "<br>$" + msg.area.price;
+            area.style.backgroundColor = "initial";
+            console.log("aa:", this.saleDialog.areas);
+            for (let i in this.saleDialog.areas) {
+              if (this.saleDialog.areas.id === msg.id) {
+                this.saleDialog.areas.splice(i, 1);
+              }
+            }
+          } else {
+            area.innerHTML =
+              msg.area.country +
+              "<br>$" +
+              msg.area.price +
+              "<br>" +
+              (Number(msg.area.rank) - 1) +
+              " X ";
+
+            this.saleDialog.areas[msg.id].rank = Number(msg.area.rank) - 1;
+          }
+        } else if (msg.result == "noOwner" && msg._id === this.currentPlayer) {
+          Message({
+            message: "这不是你的房子，不能出售",
+            type: "error",
+            duration: 5 * 1000
+          });
+        }
+      });
+
+      // 现金不足，需卖房
+      this.sockets.subscribe(this.roomId + "-needSaleHouseBack", msg => {
+        console.log("现金不足卖房： ", msg);
+        // this.currentRound = msg.nextPlayer;
+        this.saleDialog.visible = false;
+        this.saleDialog.moneyTextVisible = false;
+        this.players[msg._id].money = msg.payPlayerMoney;
+        if (!msg.payFor && msg.payFor != "") {
+          this.players[msg.payFor].money = msg.getPlayerMoney;
+        }
+        let text = "";
+        if (msg.result === "moneyEnough") {
+          text = "扣款 " + msg.effect + "元 成功";
+        } else {
+          for (let i in msg.sale) {
+            let area = document.getElementById("room-" + msg.sale[i].houseId);
+            if (msg.sale[i].rank < 1) {
+              area.innerHTML =
+                msg.sale[i].country + "<br>$" + msg.sale[i].price;
+              area.style.backgroundColor = "initial";
+            } else {
+              area.innerHTML =
+                msg.sale[i].country +
+                "<br>$" +
+                msg.sale[i].price +
+                "<br>" +
+                (Number(msg.sale[i].rank) - 1) +
+                " X ";
+            }
+          }
+
+          text = "现金依然不足，已自动售出 ";
+          for (let i in msg.sale) {
+            text += msg.sale[i].country + ",";
+          }
+
+          text =
+            text.substr(0, text.length - 1) +
+            "的房屋或土地支付 " +
+            msg.effect +
+            "元";
+        }
+
+        Message({
+          message: text,
+          type: "message",
+          duration: 5 * 1000
+        });
+      });
+
+      // 游戏结束
+      this.sockets.subscribe(this.roomId + "-gameOver", msg => {
+        console.log("游戏结束： ", msg);
+        Message({
+          message: "游戏结束",
+          type: "message",
+          duration: 7 * 1000
+        });
+
+        // 退回游戏大厅
+        setTimeout(() => {
+          this.$router.push({ path: "/hall" });
+        }, 7000);
+      });
+    },
     getCurrentPlayer() {
       user
         .current()
         .then(res => {
-          // console.log('cuu res: ', res)
-          this.currentPlayer = res.data._id;
-          this.getRoomUsers();
+          if (res.errno === 1000) {
+            // console.log('cuu res: ', res)
+            this.currentPlayer = res.data._id;
+            this.myname = res.data.username;
+            this.getRoomUsers();
+          }
         })
         .catch(e => {
           console.log("error: ", e);
@@ -633,52 +646,161 @@ export default {
     },
     getRoomUsers() {
       game
-        .getUserByRoom("richman-room-336")
+        .getRoom(this.roomId)
         .then(res => {
-          console.log("ressss: ", res);
-          this.players = res.data;
+          if (res.errno === 1000) {
+            console.log("ressss: ", res);
+            this.players = JSON.parse(res.data.players);
+            console.log("ppppppppppppp: ", this.players);
+            this.setMap(JSON.parse(res.data.area));
+            // this.area = JSON.parse(res.data.area);
+            this.roomInfo.roomStatus = res.data.status;
+            this.roomInfo.owner = res.data.owner;
+            this.playerIds = res.data.playerIds.split(",");
+            this.currentRound = res.data.playerIds.split(",")[
+              res.data.currentRound
+            ];
 
-          // 创建玩家
-          let player = document.createElement("div");
-          player.id = this.currentPlayer;
-          player.className = "player";
-          let name = document.createElement("div");
-          // name.textContent = "玩家一";
-          name.style.height = "25px";
-          player.appendChild(name);
-          let img = document.createElement("img");
-          img.src = "/static/img/player.png";
-          img.className = "playerImg";
-          img.alt = "玩家";
-          player.appendChild(img);
-          player.style.width = "8.33%";
-          player.style.height = "15%";
-          player.style.position = "absolute";
-          player.style.left = "91.67%";
-          player.style.top = "85.815%";
-          document
-            .getElementById("bg")
-            .insertBefore(player, document.getElementById("top"));
+            // 轮到当前用户时投掷按钮可用
+            if (this.currentPlayer === this.currentRound) {
+              this.diceButton = false;
+            }
+
+            // this.players[this.currentPlayer].step = 0;
+            console.log("players: ", res.data);
+
+            for (let pl in this.players) {
+              this.players[pl].step = 0;
+
+              // this.run(pl, this.players[pl].step);
+              // console.log("key  : ", pl);
+              // 创建玩家
+              let player = document.createElement("div");
+              player.id = pl;
+              // player.id = this.currentPlayer;
+              player.className = "player";
+              // console.log("pl: ", pl);
+              let name = document.createElement("div");
+              // name.textContent = "玩家一";
+              name.style.height = "25px";
+              player.appendChild(name);
+              let img = document.createElement("img");
+              img.src = "/static/img/player.png";
+              img.className = "playerImg";
+              img.alt = "玩家";
+              img.style["background-color"] = this.players[pl].color;
+              player.appendChild(img);
+              player.style.width = "8.33%";
+              player.style.height = "15%";
+              player.style.position = "absolute";
+              player.style.left = "91.67%";
+              player.style.top = "85.815%";
+              player.style.zIndex = 9999;
+              document
+                .getElementById("bg")
+                .insertBefore(player, document.getElementById("top"));
+
+              // 人物移动动画
+              let end = this.players[pl].position.x - 8.33;
+              // 开始行走
+              let timer = setInterval(() => {
+                this.runStep(
+                  player,
+                  JSON.parse(res.data.players)[pl].step,
+                  end,
+                  timer,
+                  pl,
+                  "init"
+                );
+              }, 20);
+            }
+          } else if (res.errno === 1048) {
+            Message({
+              message: res.errmsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+            this.$router.push({ path: "/hall" });
+          }
         })
         .catch(e => {
           console.log("error: ", e);
         });
     },
+    setMap(area) {
+      // console.log("areas: ", area);
+      this.area = area;
+      let keys = Object.keys(area);
+      for (let i of keys) {
+        // console.log(i);
+        let room = document.getElementById("room-" + i);
+        room.innerHTML =
+          area[i].country +
+          (area[i].type === "place" ? "<br>$" + area[i].price : "");
+        // console.log(area[i].type)
+        if (area[i].type === "chance") {
+          // console.log('red')
+          room.style.color = "red";
+        } else if (area[i].type === "fate") {
+          // console.log('yellow')
+          room.style.color = "yellow";
+        }
 
-    buy() {
-      console.log("11111");
+        if (area[i].rank > 0) {
+          room.innerHTML += "<br>" + (area[i].rank - 1) + " X ";
+          let houseImg = document.createElement("img");
+          houseImg.src = "/static/img/house.png";
+          houseImg.style.width = "20%";
+          room.appendChild(houseImg);
+        }
 
-      console.log("step: ", this.players[this.currentPlayer].step);
-      console.log(
-        "价格：",
-        this.country[this.players[this.currentPlayer].step].price
-      );
-      this.players[this.currentPlayer].money -= this.country[
-        this.players[this.currentPlayer].step
-      ].price;
-      this.dialogVisible = false;
+        let playerKeys = Object.keys(this.players);
+        // console.log('ids: ', this.players)
+        for (let playerId of playerKeys) {
+          // console.log("pid: ", playerId);
+          // console.log("owner: ", area[i].owner);
+          if (playerId === area[i].owner) {
+            // console.log("地盘： ", playerId, area[i]);
+            let ar = document.getElementById("room-" + i);
+            ar.style.backgroundColor = this.players[playerId].color;
+          }
+        }
+      }
     },
-    run(step) {
+    startGame() {
+      game
+        .startGame(this.roomId)
+        .then(res => {
+          console.log("fanhui: ", res);
+          if (res.errno === 1000) {
+            // this.$router.push({ path: "/", query: { roomId: this.roomId } });
+            // console.log("加入房间 ", res);
+          } else if (res.errno === 1050) {
+            Message({
+              message: "游戏已经开始",
+              type: "error",
+              duration: 5 * 1000
+            });
+          } else if (res.errno === 1026) {
+            Message({
+              message: res.data,
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    throwDice() {
+      this.$socket.emit("throwDice", {
+        token: localStorage.richman_token,
+        roomId: this.roomId
+      });
+      this.diceButton = true;
+    },
+    run(userId, random) {
       // console.log(step);
       // let player = document.getElementById('player');
       // player.style = 'transform: translate(-200px,0px);';
@@ -692,11 +814,11 @@ export default {
       // console.log(dice);
 
       setTimeout(() => {
-        // 获得骰子点数
-        let random = Math.floor(Math.random() * 6) + 1;
-        if (random === 7) {
-          random = 6;
-        }
+        // // 获得骰子点数
+        // let random = Math.floor(Math.random() * 6) + 1;
+        // if (random === 7) {
+        //   random = 6;
+        // }
 
         // 扔完骰子后显示点数
         if (random === 1) {
@@ -721,152 +843,273 @@ export default {
         smallDice.style.display = "block";
 
         // 人物移动动画
-        let player = document.getElementById(this.currentPlayer);
-        let step = this.players[this.currentPlayer].step;
+        let player = document.getElementById(userId);
+        let step = this.players[userId].step;
         let end;
         if (step >= 0 && step < 11) {
-          end = this.players[this.currentPlayer].position.x - 8.33;
+          end = this.players[userId].position.x - 8.33;
         } else if (step >= 11 && step < 17) {
-          end = this.players[this.currentPlayer].position.y - 14.285;
+          end = this.players[userId].position.y - 14.285;
         } else if (step >= 17 && step < 28) {
-          end = this.players[this.currentPlayer].position.x + 8.33;
-        } else if ((step >= 28 && step <= 32) || step === 0) {
-          end = this.players[this.currentPlayer].position.y + 14.285;
+          end = this.players[userId].position.x + 8.33;
+        } else if (step >= 28 && step < 34) {
+          end = this.players[userId].position.y + 14.285;
         }
         // 开始行走
         let timer = setInterval(() => {
           this.runStep(
             player,
-            (this.players[this.currentPlayer].step + random) % 33,
+            (this.players[userId].step + random) % 34,
             end,
-            timer
+            timer,
+            userId,
+            "dice"
           );
         }, 20);
       }, 1100);
     },
 
     // 走步
-    runStep(player, endStep, end, timer) {
-      let step = this.players[this.currentPlayer].step;
+    runStep(player, endStep, end, timer, userId, type) {
+      // console.log("userId: ", userId);
+      // console.log("当前： ", this.players[userId]);
+      let step = this.players[userId].step;
+      // console.log("step: ", step, '   end: ', end, "    endStep: ", endStep);
 
       // 到达目的地
       if (step === endStep) {
+        // console.log("end: ", endStep);
         window.clearInterval(timer);
+        // console.log("end players: ", this.players);
 
-        console.log(
-          "type: ",
-          this.country[this.players[this.currentPlayer].step].type
-        );
-        if (
-          this.country[this.players[this.currentPlayer].step].type === "place"
-        ) {
-          // 提示是否够买
-          this.dialogVisible = true;
-        } else if (
-          this.country[this.players[this.currentPlayer].step].type === "fate"
-        ) {
-          // 抽取命运
-          let random =
-            Math.floor(Math.random() * Object.keys(this.fates).length) + 1;
-          if (random === Object.keys(this.fates).length + 1) {
-            random = Object.keys(this.fates).length;
+        if (type === "dice") {
+          if (
+            this.diceMsg.result === "buy" ||
+            this.diceMsg.result === "upgrade" ||
+            this.diceMsg.result === "pay" ||
+            this.diceMsg.result === "run"
+          ) {
+            if (userId === this.currentPlayer) {
+              if (this.diceMsg.area.type === "place") {
+                console.log("ssdf:", this.diceMsg);
+                // 提示是否够买
+                if (this.diceMsg.result === "buy") {
+                  this.buyDialog.dialogText =
+                    "是否够买" + this.diceMsg.area.country;
+                  this.buyDialog.price = "价格：" + this.diceMsg.area.price;
+                  this.buyDialog.dialogVisible = true;
+                } else if (this.diceMsg.result === "upgrade") {
+                  this.buyDialog.dialogText =
+                    "是否升级" + this.diceMsg.area.country;
+                  this.buyDialog.price =
+                    "价格：" + this.diceMsg.area.upgradePrice;
+                  this.buyDialog.dialogVisible = true;
+                }
+              }
+            }
+
+            if (this.diceMsg.area.type === "place") {
+              if (this.diceMsg.result === "pay") {
+                console.log(
+                  "价格： ",
+                  this.diceMsg.area.income[this.diceMsg.area.rank]
+                );
+                this.players[
+                  this.diceMsg._id
+                ].money -= this.diceMsg.area.income[this.diceMsg.area.rank];
+                this.players[
+                  this.diceMsg.payFor
+                ].money += this.diceMsg.area.income[this.diceMsg.area.rank];
+                Message({
+                  message:
+                    this.players[this.diceMsg._id].username +
+                    " 付给 " +
+                    this.players[this.diceMsg.payFor].username +
+                    " " +
+                    this.diceMsg.area.income[this.diceMsg.area.rank],
+                  type: "message",
+                  duration: 5 * 1000
+                });
+              }
+              // this.buyDialog.dialogVisible = true;
+            } else if (
+              this.diceMsg.area.type === "chance" ||
+              this.diceMsg.area.type === "fate" ||
+              this.diceMsg.area.type === "prison"
+            ) {
+              console.log("命命命命命命命命命命命命命命");
+              // 机会或命运
+              this.tipDialog.title = this.diceMsg.effect.text;
+              this.tipDialog.dialogText = this.diceMsg.effect.result;
+              this.tipDialog.dialogVisible = true;
+              this.players[this.diceMsg._id].money += Number(
+                this.diceMsg.effect.effect
+              );
+
+              setTimeout(() => {
+                this.tipDialog.dialogVisible = false;
+              }, 3000);
+            }
+          } else if (this.diceMsg.result === "needSaleHouse") {
+            if (this.diceMsg._id === this.currentPlayer) {
+              console.log("msg:", this.diceMsg);
+              let money = 0;
+              if (this.diceMsg.area.type === "place") {
+                money = this.diceMsg.area.income[this.diceMsg.area.rank];
+              } else {
+                money = 0 - this.diceMsg.effect.effect;
+              }
+              this.saleDialog.moneyText = "需支付 " + money + "元";
+              this.saleDialog.moneyTextVisible = true;
+              this.getCurrentAreas();
+              Message({
+                message:
+                  "现金不足，请在倒计时内卖出足够的房产支付 " + money + " 元",
+                type: "error",
+                duration: 5 * 1000
+              });
+            }
+          } else if (this.diceMsg.result === "nothingToPay") {
+            Message({
+              message:
+                this.players[this.diceMsg.result._id].username + " 破产了",
+              type: "warning",
+              duration: 5 * 1000
+            });
           }
 
-          let fate = this.fates[random];
-          console.log(fate);
-        } else if (
-          this.country[this.players[this.currentPlayer].step].type === "chance"
-        ) {
-          // 抽取机会
-          let random =
-            Math.floor(Math.random() * Object.keys(this.chances).length) + 1;
-          if (random === Object.keys(this.chances).length + 1) {
-            random = Object.keys(this.chances).length;
+          if (this.diceMsg.throughStart) {
+            this.players[this.diceMsg._id].money += 2000;
           }
-
-          let chance = this.chances[random];
-          console.log(chance);
         }
       }
 
       // 根据所在位置判断行走方向
       if (step >= 0 && step < 11) {
-        this.players[this.currentPlayer].position.x -= 0.5;
-        if (this.players[this.currentPlayer].position.x - end < 0.5) {
+        // 移动一点
+        this.players[userId].position.x -= 0.5;
+        if (this.players[userId].position.x - end < 0.5) {
+          // console.log("走完一格: ", step);
           player.style.left = end + "%";
           window.clearInterval(timer);
-          this.players[this.currentPlayer].step += 1;
+          this.players[userId].step += 1;
+          // console.log("thi: ", this.players[userId]);
           end -= 8.33;
           timer = setInterval(() => {
             if (step === 10) {
-              this.runStep(player, endStep, 85.815 - 14.285, timer);
+              this.runStep(
+                player,
+                endStep,
+                85.815 - 14.285,
+                timer,
+                userId,
+                type
+              );
             } else {
-              this.runStep(player, endStep, end, timer);
+              this.runStep(player, endStep, end, timer, userId, type);
             }
           }, 20);
         } else {
-          player.style.left =
-            this.players[this.currentPlayer].position.x - 0.5 + "%";
+          player.style.left = this.players[userId].position.x - 0.5 + "%";
         }
       } else if (step >= 11 && step < 17) {
-        this.players[this.currentPlayer].position.y -= 0.5;
-        if (this.players[this.currentPlayer].position.y - end < 0.5) {
+        this.players[userId].position.y -= 0.5;
+        if (this.players[userId].position.y - end < 0.5) {
           player.style.top = end + "%";
           window.clearInterval(timer);
-          this.players[this.currentPlayer].step += 1;
+          this.players[userId].step += 1;
           end -= 14.285;
           timer = setInterval(() => {
             if (step === 16) {
-              this.runStep(player, endStep, -0.65 + 8.33, timer);
+              this.runStep(player, endStep, -0.65 + 8.33, timer, userId, type);
             } else {
-              this.runStep(player, endStep, end, timer);
+              this.runStep(player, endStep, end, timer, userId, type);
             }
           }, 20);
         } else {
-          player.style.top =
-            this.players[this.currentPlayer].position.y - 0.5 + "%";
+          player.style.top = this.players[userId].position.y - 0.5 + "%";
         }
       } else if (step >= 17 && step < 28) {
-        this.players[this.currentPlayer].position.x += 0.5;
-        if (end - this.players[this.currentPlayer].position.x < 0.5) {
+        this.players[userId].position.x += 0.5;
+        if (end - this.players[userId].position.x < 0.5) {
           player.style.left = end + "%";
           window.clearInterval(timer);
-          this.players[this.currentPlayer].step += 1;
+          this.players[userId].step += 1;
           end += 8.33;
           timer = setInterval(() => {
             if (step === 27) {
-              this.runStep(player, endStep, 0.03 + 14.285, timer);
+              this.runStep(player, endStep, 0.03 + 14.285, timer, userId, type);
             } else {
-              this.runStep(player, endStep, end, timer);
+              this.runStep(player, endStep, end, timer, userId, type);
             }
           }, 20);
         } else {
-          player.style.left =
-            this.players[this.currentPlayer].position.x + 0.5 + "%";
+          player.style.left = this.players[userId].position.x + 0.5 + "%";
         }
-      } else if (step >= 28 && step <= 33) {
-        this.players[this.currentPlayer].position.y += 0.5;
-        if (end - this.players[this.currentPlayer].position.y < 0.5) {
+      } else if (step >= 28 && step < 34) {
+        this.players[userId].position.y += 0.5;
+        if (end - this.players[userId].position.y < 0.5) {
           player.style.top = end + "%";
           window.clearInterval(timer);
           if (step >= 33) {
-            this.players[this.currentPlayer].step = 0;
+            this.players[userId].step = 0;
           } else {
-            this.players[this.currentPlayer].step += 1;
+            this.players[userId].step += 1;
           }
+
           end += 14.285;
           timer = setInterval(() => {
             if (step === 33) {
-              this.runStep(player, endStep, 91.67 - 8.33, timer);
+              console.log("到达起点");
+              this.runStep(player, endStep, 91.67 - 8.33, timer, userId, type);
             } else {
-              this.runStep(player, endStep, end, timer);
+              this.runStep(player, endStep, end, timer, userId, type);
             }
           }, 20);
         } else {
-          player.style.top =
-            this.players[this.currentPlayer].position.y + 0.5 + "%";
+          player.style.top = this.players[userId].position.y + 0.5 + "%";
         }
       }
+    },
+    buy(isBuy) {
+      console.log("step: ", this.players[this.currentPlayer].step);
+      this.$socket.emit("buyArea", {
+        token: localStorage.richman_token,
+        roomId: this.roomId,
+        orderId: this.diceMsg.orderId,
+        isBuy: isBuy
+      });
+    },
+    getCurrentAreas() {
+      console.log("sssss", this.saleDialog);
+      this.saleDialog.visible = true;
+      game
+        .getCurrentAreas(this.roomId)
+        .then(res => {
+          if (res.errno === 1000) {
+            console.log("ressss: ", res);
+            this.saleDialog.areas = res.data;
+          } else if (res.errno === 1048) {
+            Message({
+              message: res.errmsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+            this.$router.push({ path: "/hall" });
+          }
+        })
+        .catch(e => {
+          console.log("error: ", e);
+        });
+    },
+    saleHouse(index, row) {
+      // console.log('row: ', row);
+      this.saleDialog.visible = true;
+      this.$socket.emit("saleHouse", {
+        token: localStorage.richman_token,
+        roomId: this.roomId,
+        id: row.id
+      });
     }
   }
 };
@@ -882,7 +1125,35 @@ export default {
   background: url("../assets/grunge.png");
   justify-content: center;
   align-items: center;
-  display: -webkit-flex;
+  display: flex;
+}
+
+#gamePanel {
+  /* text-align: center; */
+  /* background-size: 100% 100%; */
+  width: 100%;
+  height: 100%;
+  /* background: url("../assets/grunge.png"); */
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+#countDown {
+  width: 50px;
+  height: 30px;
+  margin-top: 30px;
+  border-radius: 15%;
+  /* background-color: #dbd6cfa1; */
+}
+
+#countDownNum {
+  width: 100%;
+  height: 100%;
+  /* margin-top: 30px; */
+  /* border-radius: 15%; */
+  background-color: #dbd6cfa1;
 }
 
 #info {
@@ -894,7 +1165,35 @@ export default {
 #playerInfo {
   width: 100%;
   height: 35%;
+  /* display: inline-block; */
   background-color: azure;
+}
+
+.user {
+  width: 100%;
+  padding: 5px;
+}
+
+.user-title {
+  font-size: 14px;
+}
+
+.userColor {
+  width: 15px;
+  height: 15px;
+  /* display: inline-block; */
+  border-radius: 50%;
+  /* float: left; */
+  margin-left: 6%;
+  background-color: black;
+}
+
+.userName {
+  float: left;
+}
+
+.money {
+  float: right;
 }
 
 #gameInfo {

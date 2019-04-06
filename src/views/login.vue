@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import user from "@/api/user";
 
 export default {
@@ -72,13 +73,23 @@ export default {
     handleLogin() {
       this.loading = true;
       console.log("loginForm: ", this.loginForm);
-      user.login(this.loginForm)
+      user
+        .login(this.loginForm)
         .then(res => {
-          localStorage.richman_token = res.data.token;
-          console.log("res: ", res);
-          console.log(localStorage);
+          if (res.errno === 1000) {
+            localStorage.richman_token = res.data.token;
+            console.log("res: ", res);
+            console.log(localStorage);
+            this.$router.push({ path: "/hall" });
+          } else {
+            Message({
+              message: res.errmsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+
           this.loading = false;
-          this.$router.push({ path: "/" });
         })
         .catch(e => {
           console.log("error: ", e);

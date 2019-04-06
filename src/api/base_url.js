@@ -10,7 +10,12 @@ const apiConfig = {
     current: '/user/current',
   },
   game: {
-    getUserByRoom: '/game/getUserByRoom'
+    getRoom: '/game/getRoom',
+    getRooms: '/game/getRooms',
+    createRoom: '/game/createRoom',
+    joinRoom: '/game/joinRoom',
+    startGame: '/game/startGame',
+    getCurrentAreas: '/game/getCurrentAreas',
   }
 }
 export default {

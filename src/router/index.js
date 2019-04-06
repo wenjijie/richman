@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Game from '@/views/game'
-import Login from '@/views/login'
-import Signup from '@/views/signup'
+// import Game from '@/views/game'
+// import Login from '@/views/login'
+// import Signup from '@/views/signup'
+// import Hall from '@/views/hall'
 
 Vue.use(Router)
 
@@ -11,16 +12,21 @@ export default new Router({
     {
       path: '/',
       name: 'Game',
-      component: Game,
+      component: () => import('@/views/game'),
+    },
+    {
+      path: '/hall',
+      component:() => import('@/views/hall')
+      // hidden: true
     },
     {
       path: '/signup',
-      component:Signup
+      component:() => import('@/views/signup')
       // hidden: true
     },
     {
       path: '/login',
-      component:Login
+      component:() => import('@/views/login')
       // hidden: true
     },
   ]
