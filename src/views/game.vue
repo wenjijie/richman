@@ -224,10 +224,6 @@
       :visible.sync="tipDialog.dialogVisible"
       width="30%">
       <span>{{tipDialog.dialogText}}</span>
-      <!-- <span slot="footer" class="dialog-footer" style="text-align:center;">
-        <el-button @click="buy(false)">取 消</el-button>
-        <el-button type="primary" @click="buy(true)">确 定</el-button>
-      </span> -->
     </el-dialog>
   </div>
 </template>
@@ -238,37 +234,25 @@
 import user from "@/api/user";
 import game from "@/api/game";
 import { Message } from "element-ui";
-// import io from 'socket.io';
-// const io = require('../assets/js/socket.io')
 
 export default {
   name: "App",
   data() {
     return {
-      roomId: "",
-      diceButton: false,
-      playerNum: 1,
+      roomId: "", // 房间id
+      diceButton: false, // 骰子按钮可用状态
+      playerNum: 1, // 玩家实际数量
       myname: "",
-      currentPlayer: "",
-      currentRound: "", // 当前轮到的玩家
+      currentPlayer: "", // 当前用户id
+      currentRound: "", // 当前轮到的玩家id
       currentStatus: "dice", // 等待掷骰子(dice)、等待玩家操作(oper)
       roomInfo: {
         roomStatus: "等待中",
         owner: ""
       },
-      // players: {
-      //   player1: {
-      //     step: 0,
-      //     money: 15000,
-      //     position: {
-      //       x: 91.67,
-      //       y: 85.815
-      //     }
-      //   }
-      // },
-      players: {},
+      players: {}, // 房间内玩家信息
       // socket: "",
-      diceMsg: {},
+      diceMsg: {}, // 扔骰子返回的信息存储到diceMsg，走完步后使用
       buyDialog: {
         title: "提示",
         dialogVisible: false,
@@ -287,29 +271,18 @@ export default {
         dialogVisible: false,
         dialogText: ""
       },
+      // 倒计时
       countDown: {
         num: 0,
         visible: false
       },
+      // 土地信息
       area: {}
     };
   },
-  created() {
-    // console.log(this.$websocket,"websocket")
-  },
+  created() {},
   mounted() {
-    // this.$socket.emit("test", {
-    //   token: localStorage.richman_token,
-    //   name: '336',
-    //   max: 8
-    // });
     this.roomId = this.$route.query.roomId;
-
-    // 加入房间
-    // this.$socket.emit("joinRoom", {
-    //   token: localStorage.richman_token,
-    //   roomId: this.roomId
-    // });
     this.getCurrentPlayer();
 
     // 订阅websocket消息
@@ -324,38 +297,21 @@ export default {
         this.currentRound = msg.nextPlayer;
 
         // 轮到当前用户时投掷按钮可用
-        if (
-          msg.result != "buy" &&
-          msg.result != "upgrade" &&
-          this.currentPlayer === msg.nextPlayer
-        ) {
-          if (this.currentPlayer === msg.nextPlayer) {
-            this.diceButton = false;
-          }
-        }
+        // if (
+        //   msg.result != "buy" &&
+        //   msg.result != "upgrade" &&
+        //   this.currentPlayer === msg.nextPlayer
+        // ) {
+        //   if (this.currentPlayer === msg.nextPlayer) {
+        //     this.diceButton = false;
+        //   }
+        // }
         if (
           msg.result === "run" ||
           msg.result === "buy" ||
           msg.result === "upgrade" ||
           msg.result === "pay"
         ) {
-          // if (msg.area.type === "chance" || msg.area.type === "fate") {
-          //   // 机会或命运
-          //   this.tipDialog.title = msg.effect.text;
-          //   this.tipDialog.dialogText = msg.effect.result;
-          //   this.tipDialog.dialogVisible = true;
-          //   this.players[msg._id].money += msg.effect.effect;
-
-          //   setTimeout(() => {
-          //     this.tipDialog.dialogVisible = false;
-          //   }, 3000);
-          //   // Message({
-          //   //   message: msg.effect.text,
-          //   //   type: "warning",
-          //   //   duration: 5 * 1000
-          //   // });
-          // } else if (msg.area.type === "prison") {
-          // }
           this.players[msg._id].area = msg.area;
           this.run(msg._id, msg.step);
         } else if (msg.result === "noRound") {
@@ -396,12 +352,12 @@ export default {
           console.log(houseImg);
           area.appendChild(houseImg);
 
-          Message({
-            message:
-              this.players[msg._id].username + " 够买了 " + msg.area.country,
-            type: "message",
-            duration: 5 * 1000
-          });
+          // Message({
+          //   message:
+          //     this.players[msg._id].username + " 够买了 " + msg.area.country,
+          //   type: "message",
+          //   duration: 5 * 1000
+          // });
         } else if (msg.result === "upgrade") {
           this.players[msg._id].money = msg.money;
           // let room = document.getElementById("room-" + i);
@@ -419,11 +375,11 @@ export default {
           console.log(houseImg);
           area.appendChild(houseImg);
 
-          Message({
-            message: "升级成功",
-            type: "message",
-            duration: 5 * 1000
-          });
+          // Message({
+          //   message: "升级成功",
+          //   type: "message",
+          //   duration: 5 * 1000
+          // });
         } else if (msg.result === "noMoney") {
           Message({
             message: "金钱不足",
@@ -528,19 +484,28 @@ export default {
               msg.username +
               " 出售了 " +
               msg.area.country +
-              (msg.result == "place" ? "的一间房子" : ""),
+              (msg.result == "place" ? "" : "的一间房子"),
             type: "message",
             duration: 5 * 1000
           });
+          console.log("asdfsdf: ", this.players[msg._id]);
           this.players[msg._id].money = msg.money;
 
-          let area = document.getElementById("room-" + msg.houseId);
+          let area = document.getElementById("room-" + msg.area.id);
+          // let area = document.getElementById("room-" + msg.houseId);
           if (msg.result == "place") {
             area.innerHTML = msg.area.country + "<br>$" + msg.area.price;
             area.style.backgroundColor = "initial";
             console.log("aa:", this.saleDialog.areas);
             for (let i in this.saleDialog.areas) {
-              if (this.saleDialog.areas.id === msg.id) {
+              console.log(
+                "this.saleDialog.areas.id",
+                this.saleDialog.areas[i].id
+              );
+              console.log("houseId: ", msg.area.id);
+              // console.log("houseId: ", msg.area.id);
+              if (this.saleDialog.areas[i].id === msg.area.id) {
+              // if (this.saleDialog.areas[i].id === msg.area.id) {
                 this.saleDialog.areas.splice(i, 1);
               }
             }
@@ -553,7 +518,17 @@ export default {
               (Number(msg.area.rank) - 1) +
               " X ";
 
-            this.saleDialog.areas[msg.id].rank = Number(msg.area.rank) - 1;
+            let houseImg = document.createElement("img");
+            houseImg.src = "/static/img/house.png";
+            houseImg.style.width = "20%";
+            area.appendChild(houseImg);
+
+            for (let i in this.saleDialog.areas) {
+              if (this.saleDialog.areas[i].id === msg.area.id) {
+              // if (this.saleDialog.areas[i].id === msg.houseId) {
+                this.saleDialog.areas[i].rank = Number(msg.area.rank) - 1;
+              }
+            }
           }
         } else if (msg.result == "noOwner" && msg._id === this.currentPlayer) {
           Message({
@@ -571,7 +546,8 @@ export default {
         this.saleDialog.visible = false;
         this.saleDialog.moneyTextVisible = false;
         this.players[msg._id].money = msg.payPlayerMoney;
-        if (!msg.payFor && msg.payFor != "") {
+        if (msg.payFor && msg.payFor != "") {
+          console.log("ss: ", msg.getPlayerMoney);
           this.players[msg.payFor].money = msg.getPlayerMoney;
         }
         let text = "";
@@ -579,7 +555,8 @@ export default {
           text = "扣款 " + msg.effect + "元 成功";
         } else {
           for (let i in msg.sale) {
-            let area = document.getElementById("room-" + msg.sale[i].houseId);
+            let area = document.getElementById("room-" + msg.sale[i].id);
+            // let area = document.getElementById("room-" + msg.sale[i].houseId);
             if (msg.sale[i].rank < 1) {
               area.innerHTML =
                 msg.sale[i].country + "<br>$" + msg.sale[i].price;
@@ -592,6 +569,11 @@ export default {
                 "<br>" +
                 (Number(msg.sale[i].rank) - 1) +
                 " X ";
+
+              let houseImg = document.createElement("img");
+              houseImg.src = "/static/img/house.png";
+              houseImg.style.width = "20%";
+              area.appendChild(houseImg);
             }
           }
 
@@ -670,7 +652,7 @@ export default {
             console.log("players: ", res.data);
 
             for (let pl in this.players) {
-              this.players[pl].step = 0;
+              // this.players[pl].step = 0;
 
               // this.run(pl, this.players[pl].step);
               // console.log("key  : ", pl);
@@ -693,26 +675,29 @@ export default {
               player.style.width = "8.33%";
               player.style.height = "15%";
               player.style.position = "absolute";
-              player.style.left = "91.67%";
-              player.style.top = "85.815%";
+              player.style.left = this.players[pl].area.position.x+"%";
+              player.style.top = this.players[pl].area.position.y+"%";
+              this.players[pl].position = this.players[pl].area.position;
+              // player.style.left = "91.67%";
+              // player.style.top = "85.815%";
               player.style.zIndex = 9999;
               document
                 .getElementById("bg")
                 .insertBefore(player, document.getElementById("top"));
 
-              // 人物移动动画
-              let end = this.players[pl].position.x - 8.33;
-              // 开始行走
-              let timer = setInterval(() => {
-                this.runStep(
-                  player,
-                  JSON.parse(res.data.players)[pl].step,
-                  end,
-                  timer,
-                  pl,
-                  "init"
-                );
-              }, 20);
+              // // 人物移动动画
+              // let end = this.players[pl].position.x - 8.33;
+              // // 开始行走
+              // let timer = setInterval(() => {
+              //   this.runStep(
+              //     player,
+              //     JSON.parse(res.data.players)[pl].step,
+              //     end,
+              //     timer,
+              //     pl,
+              //     "init"
+              //   );
+              // }, 20);
             }
           } else if (res.errno === 1048) {
             Message({
@@ -805,6 +790,7 @@ export default {
       // let player = document.getElementById('player');
       // player.style = 'transform: translate(-200px,0px);';
 
+      console.log('id: ', userId, ' rrr: ', random)
       let dice = document.getElementById("big-dice");
       let smallDice = document.getElementById("group2");
 
@@ -846,6 +832,7 @@ export default {
         let player = document.getElementById(userId);
         let step = this.players[userId].step;
         let end;
+        console.log('player postion: ', this.players[userId].position.x, this.players[userId].position.y)
         if (step >= 0 && step < 11) {
           end = this.players[userId].position.x - 8.33;
         } else if (step >= 11 && step < 17) {
@@ -855,6 +842,8 @@ export default {
         } else if (step >= 28 && step < 34) {
           end = this.players[userId].position.y + 14.285;
         }
+        console.log('step: ', step);
+        console.log('end: ', end);
         // 开始行走
         let timer = setInterval(() => {
           this.runStep(
@@ -883,6 +872,17 @@ export default {
         // console.log("end players: ", this.players);
 
         if (type === "dice") {
+          // 轮到当前用户时投掷按钮可用
+          if (
+            (this.diceMsg.result === "run" ||
+            this.diceMsg.result === "pay") &&
+            this.currentPlayer === this.diceMsg.nextPlayer
+          ) {
+            // if (this.currentPlayer === this.diceMsg.nextPlayer) {
+              this.diceButton = false;
+            // }
+          }
+
           if (
             this.diceMsg.result === "buy" ||
             this.diceMsg.result === "upgrade" ||
@@ -937,7 +937,6 @@ export default {
               this.diceMsg.area.type === "fate" ||
               this.diceMsg.area.type === "prison"
             ) {
-              console.log("命命命命命命命命命命命命命命");
               // 机会或命运
               this.tipDialog.title = this.diceMsg.effect.text;
               this.tipDialog.dialogText = this.diceMsg.effect.result;
@@ -951,9 +950,9 @@ export default {
               }, 3000);
             }
           } else if (this.diceMsg.result === "needSaleHouse") {
+            let money = 0;
             if (this.diceMsg._id === this.currentPlayer) {
               console.log("msg:", this.diceMsg);
-              let money = 0;
               if (this.diceMsg.area.type === "place") {
                 money = this.diceMsg.area.income[this.diceMsg.area.rank];
               } else {
@@ -962,13 +961,13 @@ export default {
               this.saleDialog.moneyText = "需支付 " + money + "元";
               this.saleDialog.moneyTextVisible = true;
               this.getCurrentAreas();
-              Message({
-                message:
-                  "现金不足，请在倒计时内卖出足够的房产支付 " + money + " 元",
-                type: "error",
-                duration: 5 * 1000
-              });
             }
+            Message({
+              message:
+                "现金不足，请在倒计时内卖出足够的房产支付 " + money + " 元",
+              type: "error",
+              duration: 5 * 1000
+            });
           } else if (this.diceMsg.result === "nothingToPay") {
             Message({
               message:
