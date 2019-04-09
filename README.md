@@ -1,4 +1,4 @@
-# 大富翁服务端
+# 秋富翁前端
 
 ## 项目简介
 
@@ -30,7 +30,7 @@ demo体验地址：http://richman.qiuluo.xin
 
 ## 项目结构
 
-![](https://blog.qiuluo.xin/wp-content/uploads/2019/04/M4P6JSZL68B8PHFYT.png)
+![](https://blog.qiuluo.xin/wp-content/uploads/2019/04/D0ZONFOPLD1NC6XXTDK.png)
 
 
 
