@@ -14,9 +14,6 @@
         stripe
         height="(document.getElementsByClassName('roomTable'))[0].offsetHeight)"
         style="height: 100%">
-        <!-- <el-table-column
-          label="  ">
-        </el-table-column> -->
         <el-table-column
           prop="createdAt"
           label="时间">
@@ -28,10 +25,6 @@
           prop="players.rank"
           label="名次">
         </el-table-column>
-        <!-- <el-table-column
-          prop="max"
-          label="最大玩家">
-        </el-table-column> -->
         <el-table-column
           prop="userNum"
           label="玩家数">
@@ -53,27 +46,9 @@
               disable-transitions>{{scope.row.status}}</el-tag>
           </template>
         </el-table-column>
-        <!-- <el-table-column
-          label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              v-if="scope.row.status === '等待'"
-              @click="enterRoom(scope.$index, scope.row)">进入</el-button>
-            <el-button
-              size="mini"
-              v-else-if="scope.row.status === '游戏中' && scope.row.playerIds.split(',').indexOf(userId) === -1"
-              disabled>进入</el-button>
-            <el-button
-              size="mini"
-              v-else-if="scope.row.status === '游戏中' && scope.row.playerIds.split(',').indexOf(userId) !== -1"
-              @click="enterRoom(scope.$index, scope.row)">回到游戏</el-button>
-          </template>
-        </el-table-column> -->
       </el-table>
     </div>
     <div id="createRoom">
-      <!-- <button @click="createRoomDialogVisible = true">创建房间</button> -->
     </div>
   </div>
 </template>
@@ -117,7 +92,6 @@ export default {
       .getGameInfo(this.userId)
       .then(res => {
         if (res.errno === 1000) {
-          console.log("res: ", res);
           this.tableData = res.data;
         }
       })
@@ -126,49 +100,7 @@ export default {
       });
   },
   methods: {
-    enterRoom(index, row) {
-      console.log(row);
-      game
-        .joinRoom(row.roomId)
-        .then(res => {
-          console.log("fanhui: ", res);
-          if (res.errno === 1000 || res.errno === 1020) {
-            this.$router.push({ path: "/", query: { roomId: row.roomId } });
-            console.log("加入房间 ", res);
-          } else if (res.errno === 1050 || res.errno === 1052) {
-            console.log("52");
-            Message({
-              message: res.data,
-              type: "error",
-              duration: 5 * 1000
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      // this.$router.push({ path: "/", query: { roomId: row.roomId } });
-    },
-    createRoom() {
-      console.log("new", this.newRoom);
-      game
-        .createRoom(this.newRoom)
-        .then(res => {
-          console.log("创建“ ", res);
-          if (res.errno === 1000) {
-            this.$router.push({
-              path: "/",
-              query: { roomId: res.data.roomId }
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      this.createRoomDialogVisible = false;
-    },
     back() {
-      console.log("sss");
       this.$router.push({ path: "/hall" });
     }
   }
@@ -177,7 +109,6 @@ export default {
 
 <style>
 #barCan {
-  /* background-color: aquamarine; */
   height: 10%;
   width: 100%;
 }
@@ -186,7 +117,6 @@ export default {
   height: 50px;
   width: 100%;
   align-self: flex-start;
-  /* justify-self: flex-end; */
   background-color: #d1d2d39c;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;

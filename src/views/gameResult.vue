@@ -7,9 +7,6 @@
         stripe
         height="(document.getElementsByClassName('roomTable'))[0].offsetHeight)"
         style="height: 100%">
-        <!-- <el-table-column
-          label="  ">
-        </el-table-column> -->
         <el-table-column
           prop="rank"
           label="排名">

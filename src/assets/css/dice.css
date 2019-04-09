@@ -319,7 +319,7 @@
     right: 12.5%;
 }
 
-/*设置骰子具体动画效果 确保骰子的每个面都可以看到，后面会运动快一些*/
+/*设置骰子具体动画效果 */
 @keyframes scroll {
     0% {
         transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);

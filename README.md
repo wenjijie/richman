@@ -1,21 +1,53 @@
-# richman
+# 大富翁服务端
 
-> A Vue.js project
+## 项目简介
 
-## Build Setup
+这是一个大富翁游戏项目的前端
 
-``` bash
-# install dependencies
-npm install
+后端项目地址：<https://github.com/WhellingQ/richmanServe>
 
-# serve with hot reload at localhost:8080
-npm run dev
+demo体验地址：http://richman.qiuluo.xin
 
-# build for production with minification
-npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
+
+项目利用websocket实现多人实时在线游戏。可以注册、登录，创建房间，实时游戏。
+
+游戏截图展示：
+
+![image](https://blog.qiuluo.xin/wp-content/uploads/2019/04/70Y23K9KJJESYA2RUMJ.png)
+
+![image](https://blog.qiuluo.xin/wp-content/uploads/2019/04/1PIEDRUC3IJU3WW8N_KP.png)![image](https://blog.qiuluo.xin/wp-content/uploads/2019/04/SAS__VV48SJM@4YOZ5H.png)
+
+
+
+## 环境依赖
+
+- nodejs
+- mongodb
+- redis
+
+
+
+## 项目结构
+
+![](https://blog.qiuluo.xin/wp-content/uploads/2019/04/M4P6JSZL68B8PHFYT.png)
+
+
+
+## 项目运行
+
+### 开发
+
+```bash
+$ npm i
+$ npm run dev
+$ open http://localhost:8080/
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### 部署
+
+```bash
+$ npm run build
+```
+
+打包后使用nginx、Apache等服务进行部署

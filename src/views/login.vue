@@ -60,19 +60,9 @@ export default {
       redirect: undefined
     };
   },
-  //   watch: {
-  //     $route: {
-  //       handler: function(route) {
-  //         console.log("route； ", route);
-  //         this.redirect = route.query && route.query.redirect;
-  //       },
-  //       immediate: true
-  //     }
-  //   },
   methods: {
     handleLogin() {
       this.loading = true;
-      console.log("loginForm: ", this.loginForm);
       user
         .login(this.loginForm)
         .then(res => {
@@ -96,7 +86,6 @@ export default {
         });
     },
     signup() {
-      console.log("aaaaa");
       this.$router.push({ path: "/signup" });
     }
   }

@@ -13,9 +13,6 @@
         stripe
         height="(document.getElementsByClassName('roomTable'))[0].offsetHeight)"
         style="height: 100%">
-        <!-- <el-table-column
-          label="  ">
-        </el-table-column> -->
         <el-table-column
           prop="name"
           label="名字">
@@ -178,12 +175,10 @@ export default {
     };
   },
   mounted() {
-    // this.userId = localStorage.userId;
     user
       .current()
       .then(res => {
         if (res.errno === 1000) {
-          console.log("res: ", res);
           this.user = res.data;
         }
       })
@@ -195,7 +190,6 @@ export default {
       .getRooms()
       .then(res => {
         if (res.errno === 1000) {
-          console.log("res: ", res);
           this.tableData = res.data;
         }
       })
@@ -204,21 +198,15 @@ export default {
       });
 
     let sss = document.getElementsByClassName("roomTable")[0];
-    console.log("sss: ", sss);
-    console.log("hei: ", sss.offsetHeight);
   },
   methods: {
     enterRoom(index, row) {
-      console.log(row);
       game
         .joinRoom(row.roomId)
         .then(res => {
-          console.log("fanhui: ", res);
           if (res.errno === 1000 || res.errno === 1020) {
             this.$router.push({ path: "/", query: { roomId: row.roomId } });
-            console.log("加入房间 ", res);
           } else if (res.errno === 1034 || res.errno === 1050 || res.errno === 1052) {
-            console.log("52");
             Message({
               message: res.data,
               type: "error",
@@ -229,14 +217,11 @@ export default {
         .catch(error => {
           console.log(error);
         });
-      // this.$router.push({ path: "/", query: { roomId: row.roomId } });
     },
     createRoom() {
-      console.log("new", this.newRoom);
       game
         .createRoom(this.newRoom)
         .then(res => {
-          console.log("创建“ ", res);
           if (res.errno === 1000) {
             this.$router.push({
               path: "/",
@@ -258,7 +243,6 @@ export default {
 
 <style>
 #barCan {
-  /* background-color: aquamarine; */
   height: 10%;
   width: 100%;
 }
@@ -267,13 +251,10 @@ export default {
   height: 50px;
   width: 100%;
   align-self: flex-start;
-  /* justify-self: flex-end; */
   background-color: #d1d2d39c;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   position: fixed;
-  /* align-content: center; */
-  /* flex-direction: column-reverse; */
 }
 
 #name {

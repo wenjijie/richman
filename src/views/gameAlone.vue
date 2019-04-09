@@ -1,3 +1,4 @@
+<!-- 单机版，未完成 -->
 <template>
   <div id="appself">
     <div id="bg">

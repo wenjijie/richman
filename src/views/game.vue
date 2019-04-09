@@ -1,7 +1,6 @@
 <template>
   <div id="appself">
     <div id="gamePanel">
-      <!-- <div>我：{{myname}}</div> -->
       <!-- 倒计时 -->
       <div id="countDown">
         <div id="countDownNum" v-show="countDown.visible">
@@ -171,10 +170,7 @@
       </div>
       <div id="gameInfoBorder">
         <div id="gameInfo">
-          <div id="console-wrapper">
-            <!-- <pre id="consoleText"></pre> -->
-          </div>
-          <!-- <pre id="console" style="margin: 0"></pre> -->
+          <div id="console-wrapper"></div>
         </div>
       </div>
     </div>
@@ -196,7 +192,6 @@
       :title="saleDialog.title"
       :visible.sync="saleDialog.visible">
       <div v-show="saleDialog.moneyTextVisible">{{saleDialog.moneyText}}</div>
-      <!-- <el-table :data="saleDialog.areas" height="(document.getElementById('gamePanel')).offsetHeight)"> -->
       <el-table :data="saleDialog.areas" max-height="400">
         <el-table-column property="country" label="地区"></el-table-column>
         <el-table-column property="rank" label="房屋数"></el-table-column>
@@ -246,7 +241,6 @@ export default {
         owner: ""
       },
       players: {}, // 房间内玩家信息
-      // socket: "",
       diceMsg: {}, // 扔骰子返回的信息存储到diceMsg，走完步后使用
       buyDialog: {
         title: "提示",
@@ -287,20 +281,9 @@ export default {
     socketMessage() {
       // 接受广播的骰子消息
       this.sockets.subscribe(this.roomId + "-throwDiceBack", msg => {
-        console.log("骰子消息： ", msg);
         this.diceMsg = msg;
         this.currentRound = msg.nextPlayer;
 
-        // 轮到当前用户时投掷按钮可用
-        // if (
-        //   msg.result != "buy" &&
-        //   msg.result != "upgrade" &&
-        //   this.currentPlayer === msg.nextPlayer
-        // ) {
-        //   if (this.currentPlayer === msg.nextPlayer) {
-        //     this.diceButton = false;
-        //   }
-        // }
         if (
           msg.result === "run" ||
           msg.result === "buy" ||
@@ -331,12 +314,10 @@ export default {
 
       // 接受广播的够买地区消息
       this.sockets.subscribe(this.roomId + "-buyAreaBack", msg => {
-        console.log("够买消息： ", msg);
         let area = document.getElementById(
           "room-" + this.players[msg._id].step
         );
 
-        console.log("area1: ", area);
         if (msg.result === "buy") {
           this.players[msg._id].money = msg.money;
           this.print(
@@ -349,25 +330,16 @@ export default {
           houseImg.style.width = "20%";
           area.innerHTML =
             msg.area.country + "<br>$" + msg.area.price + "<br>" + 0 + " X ";
-          console.log(houseImg);
           area.appendChild(houseImg);
 
-          // Message({
-          //   message:
-          //     this.players[msg._id].username + " 够买了 " + msg.area.country,
-          //   type: "message",
-          //   duration: 5 * 1000
-          // });
         } else if (msg.result === "upgrade") {
           this.players[msg._id].money = msg.money;
-          // let room = document.getElementById("room-" + i);
           this.print(
             this.players[msg._id].username + " 升级了 " + msg.area.country
           );
           let houseImg = document.createElement("img");
           houseImg.src = "/static/img/house.png";
           houseImg.style.width = "20%";
-          console.log("area: ", area);
           area.innerHTML =
             msg.area.country +
             "<br>$" +
@@ -375,14 +347,8 @@ export default {
             "<br>" +
             (Number(msg.area.rank) - 1) +
             " X ";
-          console.log(houseImg);
           area.appendChild(houseImg);
 
-          // Message({
-          //   message: "升级成功",
-          //   type: "message",
-          //   duration: 5 * 1000
-          // });
         } else if (msg.result === "noMoney") {
           Message({
             message: "金钱不足",
@@ -410,17 +376,12 @@ export default {
           this.diceButton = false;
         }
 
-        // this.players[this.currentPlayer].money -= this.country[
-        //   this.players[this.currentPlayer].step
-        // ].price;
         this.countDown.visible = false;
         this.buyDialog.dialogVisible = false;
-        // this.run(msg._id, msg.step);
       });
 
       // 接受破产消息
       this.sockets.subscribe(this.roomId + "-bankrupt", msg => {
-        console.log("破产： ", msg);
         Message({
           message: this.players[msg._id].username + " 破产了",
           type: "warning",
@@ -431,7 +392,6 @@ export default {
 
       // 游戏开始消息
       this.sockets.subscribe(this.roomId + "-startGameBack", msg => {
-        console.log("游戏开始： ", msg);
         if (msg.type === "start") {
           Message({
             message: "游戏开始",
@@ -445,7 +405,6 @@ export default {
 
       // 加入游戏消息
       this.sockets.subscribe(this.roomId + "-joinRoomBack", msg => {
-        console.log("加入游戏： ", msg);
         if (msg.type === "join") {
           this.getRoomUsers();
         }
@@ -463,7 +422,6 @@ export default {
 
       // 倒计时
       this.sockets.subscribe(this.roomId + "-countDown", msg => {
-        console.log("倒计时： ", msg);
         this.countDown.num = msg.countDown;
         this.countDown.visible = true;
 
@@ -475,7 +433,6 @@ export default {
 
       // 切换当前玩家
       this.sockets.subscribe(this.roomId + "-currentRound", msg => {
-        console.log("切换玩家： ", msg);
         this.currentRound = msg.nextPlayer;
         // 轮到当前用户时投掷按钮可用
         if (this.currentPlayer === msg.nextPlayer) {
@@ -485,8 +442,6 @@ export default {
 
       // 出售房屋
       this.sockets.subscribe(this.roomId + "-saleHouseBack", msg => {
-        console.log("出售房屋： ", msg);
-        console.log("ss: ", this.saleDialog.areas);
         if (msg.result == "place" || msg.result == "house") {
           Message({
             message:
@@ -506,20 +461,11 @@ export default {
           this.players[msg._id].money = msg.money;
 
           let area = document.getElementById("room-" + msg.area.id);
-          // let area = document.getElementById("room-" + msg.houseId);
           if (msg.result == "place") {
             area.innerHTML = msg.area.country + "<br>$" + msg.area.price;
             area.style.backgroundColor = "initial";
-            console.log("aa:", this.saleDialog.areas);
             for (let i in this.saleDialog.areas) {
-              console.log(
-                "this.saleDialog.areas.id",
-                this.saleDialog.areas[i].id
-              );
-              console.log("houseId: ", msg.area.id);
-              // console.log("houseId: ", msg.area.id);
               if (this.saleDialog.areas[i].id === msg.area.id) {
-                // if (this.saleDialog.areas[i].id === msg.area.id) {
                 this.saleDialog.areas.splice(i, 1);
               }
             }
@@ -539,7 +485,6 @@ export default {
 
             for (let i in this.saleDialog.areas) {
               if (this.saleDialog.areas[i].id === msg.area.id) {
-                // if (this.saleDialog.areas[i].id === msg.houseId) {
                 this.saleDialog.areas[i].rank = Number(msg.area.rank) - 1;
               }
             }
@@ -556,13 +501,10 @@ export default {
 
       // 现金不足，需卖房
       this.sockets.subscribe(this.roomId + "-needSaleHouseBack", msg => {
-        console.log("现金不足卖房： ", msg);
-        // this.currentRound = msg.nextPlayer;
         this.saleDialog.visible = false;
         this.saleDialog.moneyTextVisible = false;
         this.players[msg._id].money = msg.payPlayerMoney;
         if (msg.payFor && msg.payFor != "") {
-          console.log("ss: ", msg.getPlayerMoney);
           this.players[msg.payFor].money = msg.getPlayerMoney;
         }
         let text = "";
@@ -571,7 +513,6 @@ export default {
         } else {
           for (let i in msg.sale) {
             let area = document.getElementById("room-" + msg.sale[i].id);
-            // let area = document.getElementById("room-" + msg.sale[i].houseId);
             if (msg.sale[i].rank < 1) {
               area.innerHTML =
                 msg.sale[i].country + "<br>$" + msg.sale[i].price;
@@ -614,7 +555,6 @@ export default {
 
       // 游戏结束
       this.sockets.subscribe(this.roomId + "-gameOver", msg => {
-        console.log("游戏结束： ", msg);
         Message({
           message: "游戏结束",
           type: "message",
@@ -636,7 +576,6 @@ export default {
         .current()
         .then(res => {
           if (res.errno === 1000) {
-            // console.log('cuu res: ', res)
             this.currentPlayer = res.data._id;
             this.myname = res.data.username;
             this.getRoomUsers();
@@ -651,11 +590,8 @@ export default {
         .getRoom(this.roomId)
         .then(res => {
           if (res.errno === 1000) {
-            console.log("ressss: ", res);
             this.players = JSON.parse(res.data.players);
-            console.log("ppppppppppppp: ", this.players);
             this.setMap(JSON.parse(res.data.area));
-            // this.area = JSON.parse(res.data.area);
             this.roomInfo.roomStatus = res.data.status;
             this.roomInfo.owner = res.data.owner;
             this.playerIds = res.data.playerIds.split(",");
@@ -668,22 +604,14 @@ export default {
               this.diceButton = false;
             }
 
-            // this.players[this.currentPlayer].step = 0;
             console.log("players: ", res.data);
 
             for (let pl in this.players) {
-              // this.players[pl].step = 0;
-
-              // this.run(pl, this.players[pl].step);
-              // console.log("key  : ", pl);
               // 创建玩家
               let player = document.createElement("div");
               player.id = pl;
-              // player.id = this.currentPlayer;
               player.className = "player";
-              // console.log("pl: ", pl);
               let name = document.createElement("div");
-              // name.textContent = "玩家一";
               name.style.height = "25px";
               player.appendChild(name);
               let img = document.createElement("img");
@@ -698,26 +626,10 @@ export default {
               player.style.left = this.players[pl].area.position.x + "%";
               player.style.top = this.players[pl].area.position.y + "%";
               this.players[pl].position = this.players[pl].area.position;
-              // player.style.left = "91.67%";
-              // player.style.top = "85.815%";
               player.style.zIndex = 9999;
               document
                 .getElementById("bg")
                 .insertBefore(player, document.getElementById("top"));
-
-              // // 人物移动动画
-              // let end = this.players[pl].position.x - 8.33;
-              // // 开始行走
-              // let timer = setInterval(() => {
-              //   this.runStep(
-              //     player,
-              //     JSON.parse(res.data.players)[pl].step,
-              //     end,
-              //     timer,
-              //     pl,
-              //     "init"
-              //   );
-              // }, 20);
             }
           } else if (res.errno === 1048) {
             Message({
@@ -733,21 +645,16 @@ export default {
         });
     },
     setMap(area) {
-      // console.log("areas: ", area);
       this.area = area;
       let keys = Object.keys(area);
       for (let i of keys) {
-        // console.log(i);
         let room = document.getElementById("room-" + i);
         room.innerHTML =
           area[i].country +
           (area[i].type === "place" ? "<br>$" + area[i].price : "");
-        // console.log(area[i].type)
         if (area[i].type === "chance") {
-          // console.log('red')
           room.style.color = "red";
         } else if (area[i].type === "fate") {
-          // console.log('yellow')
           room.style.color = "yellow";
         }
 
@@ -760,12 +667,8 @@ export default {
         }
 
         let playerKeys = Object.keys(this.players);
-        // console.log('ids: ', this.players)
         for (let playerId of playerKeys) {
-          // console.log("pid: ", playerId);
-          // console.log("owner: ", area[i].owner);
           if (playerId === area[i].owner) {
-            // console.log("地盘： ", playerId, area[i]);
             let ar = document.getElementById("room-" + i);
             ar.style.backgroundColor = this.players[playerId].color;
           }
@@ -778,8 +681,6 @@ export default {
         .then(res => {
           console.log("fanhui: ", res);
           if (res.errno === 1000) {
-            // this.$router.push({ path: "/", query: { roomId: this.roomId } });
-            // console.log("加入房间 ", res);
           } else if (res.errno === 1050) {
             Message({
               message: "游戏已经开始",
@@ -806,25 +707,15 @@ export default {
       this.diceButton = true;
     },
     run(userId, random) {
-      // console.log(step);
-      // let player = document.getElementById('player');
-      // player.style = 'transform: translate(-200px,0px);';
 
-      console.log("id: ", userId, " rrr: ", random);
       let dice = document.getElementById("big-dice");
       let smallDice = document.getElementById("group2");
 
       // 隐藏小骰子，显示骰子动画
       smallDice.style.display = "none";
       dice.style.display = "block";
-      // console.log(dice);
 
       setTimeout(() => {
-        // // 获得骰子点数
-        // let random = Math.floor(Math.random() * 6) + 1;
-        // if (random === 7) {
-        //   random = 6;
-        // }
 
         // 扔完骰子后显示点数
         if (random === 1) {
@@ -852,11 +743,6 @@ export default {
         let player = document.getElementById(userId);
         let step = this.players[userId].step;
         let end;
-        console.log(
-          "player postion: ",
-          this.players[userId].position.x,
-          this.players[userId].position.y
-        );
         if (step >= 0 && step < 11) {
           end = this.players[userId].position.x - 8.33;
         } else if (step >= 11 && step < 17) {
@@ -866,8 +752,6 @@ export default {
         } else if (step >= 28 && step < 34) {
           end = this.players[userId].position.y + 14.285;
         }
-        console.log("step: ", step);
-        console.log("end: ", end);
         // 开始行走
         let timer = setInterval(() => {
           this.runStep(
@@ -884,16 +768,11 @@ export default {
 
     // 走步
     runStep(player, endStep, end, timer, userId, type) {
-      // console.log("userId: ", userId);
-      // console.log("当前： ", this.players[userId]);
       let step = this.players[userId].step;
-      // console.log("step: ", step, '   end: ', end, "    endStep: ", endStep);
 
       // 到达目的地
       if (step === endStep) {
-        // console.log("end: ", endStep);
         window.clearInterval(timer);
-        // console.log("end players: ", this.players);
 
         if (type === "dice") {
           // 轮到当前用户时投掷按钮可用
@@ -901,9 +780,7 @@ export default {
             (this.diceMsg.result === "run" || this.diceMsg.result === "pay") &&
             this.currentPlayer === this.diceMsg.nextPlayer
           ) {
-            // if (this.currentPlayer === this.diceMsg.nextPlayer) {
             this.diceButton = false;
-            // }
           }
 
           if (
@@ -914,7 +791,6 @@ export default {
           ) {
             if (userId === this.currentPlayer) {
               if (this.diceMsg.area.type === "place") {
-                console.log("ssdf:", this.diceMsg);
                 // 提示是否够买
                 if (this.diceMsg.result === "buy") {
                   this.buyDialog.dialogText =
@@ -933,10 +809,6 @@ export default {
 
             if (this.diceMsg.area.type === "place") {
               if (this.diceMsg.result === "pay") {
-                console.log(
-                  "价格： ",
-                  this.diceMsg.area.income[this.diceMsg.area.rank]
-                );
                 this.players[
                   this.diceMsg._id
                 ].money -= this.diceMsg.area.income[this.diceMsg.area.rank];
@@ -957,7 +829,6 @@ export default {
 
                 this.prin(text);
               }
-              // this.buyDialog.dialogVisible = true;
             } else if (
               this.diceMsg.area.type === "chance" ||
               this.diceMsg.area.type === "fate" ||
@@ -983,7 +854,6 @@ export default {
           } else if (this.diceMsg.result === "needSaleHouse") {
             let money = 0;
             if (this.diceMsg._id === this.currentPlayer) {
-              console.log("msg:", this.diceMsg);
               if (this.diceMsg.area.type === "place") {
                 money = this.diceMsg.area.income[this.diceMsg.area.rank];
               } else {
@@ -1030,11 +900,10 @@ export default {
         // 移动一点
         this.players[userId].position.x -= 0.5;
         if (this.players[userId].position.x - end < 0.5) {
-          // console.log("走完一格: ", step);
+          // 走完一格
           player.style.left = end + "%";
           window.clearInterval(timer);
           this.players[userId].step += 1;
-          // console.log("thi: ", this.players[userId]);
           end -= 8.33;
           timer = setInterval(() => {
             if (step === 10) {
@@ -1101,7 +970,6 @@ export default {
           end += 14.285;
           timer = setInterval(() => {
             if (step === 33) {
-              console.log("到达起点");
               this.runStep(player, endStep, 91.67 - 8.33, timer, userId, type);
             } else {
               this.runStep(player, endStep, end, timer, userId, type);
@@ -1113,7 +981,6 @@ export default {
       }
     },
     buy(isBuy) {
-      console.log("step: ", this.players[this.currentPlayer].step);
       this.$socket.emit("buyArea", {
         token: localStorage.richman_token,
         roomId: this.roomId,
@@ -1122,13 +989,11 @@ export default {
       });
     },
     getCurrentAreas() {
-      console.log("sssss", this.saleDialog);
       this.saleDialog.visible = true;
       game
         .getCurrentAreas(this.roomId)
         .then(res => {
           if (res.errno === 1000) {
-            console.log("ressss: ", res);
             this.saleDialog.areas = res.data;
           } else if (res.errno === 1048) {
             Message({
@@ -1144,7 +1009,6 @@ export default {
         });
     },
     saleHouse(index, row) {
-      // console.log('row: ', row);
       this.saleDialog.visible = true;
       this.$socket.emit("saleHouse", {
         token: localStorage.richman_token,
@@ -1153,7 +1017,6 @@ export default {
       });
     },
     print(msg) {
-      // const con = document.querySelector('#console');
       const con = document.getElementById("console-wrapper");
       let time = new Date();
       con.innerText +=
@@ -1185,11 +1048,8 @@ export default {
 }
 
 #gamePanel {
-  /* text-align: center; */
-  /* background-size: 100% 100%; */
   width: 100%;
   height: 100%;
-  /* background: url("../assets/grunge.png"); */
   justify-content: center;
   align-items: center;
   display: flex;
@@ -1201,14 +1061,11 @@ export default {
   height: 30px;
   margin-top: 30px;
   border-radius: 15%;
-  /* background-color: #dbd6cfa1; */
 }
 
 #countDownNum {
   width: 100%;
   height: 100%;
-  /* margin-top: 30px; */
-  /* border-radius: 15%; */
   background-color: #dbd6cfa1;
 }
 
@@ -1216,15 +1073,12 @@ export default {
   width: 20%;
   height: 100%;
 }
-/* table,table tr th, table tr td { border:1px solid #0094ff; } */
 
 #playerInfo {
   width: 100%;
   height: 100%;
-  /* display: inline-block; */
   background-color: #f9fff0;
   border-radius: 10px;
-  /* border-color: #000; */
 }
 
 #playerInfoBorder {
@@ -1236,7 +1090,6 @@ export default {
 }
 
 #console-wrapper {
-  /* margin: auto; */
   padding: 12px;
   border-radius: 10px;
   width: 100%;
@@ -1269,26 +1122,15 @@ pre {
 .userColor {
   width: 15px;
   height: 15px;
-  /* display: inline-block; */
   border-radius: 50%;
-  /* float: left; */
   margin-left: 6%;
   background-color: black;
 }
-
-/* .userName {
-  float: left;
-}
-
-.money {
-  float: right;
-} */
 
 #gameInfo {
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  /* background-color: rgb(96, 170, 36); */
 }
 
 #gameInfoBorder {
@@ -1309,22 +1151,18 @@ pre {
 }
 
 #top {
-  /* background-color: saddlebrown; */
   height: 14.285%;
-  /* border-top-left-radius: 10px; */
 }
 
 .row-room {
   width: 8.33%;
   height: 100%;
   float: left;
-  /* background-color: blueviolet; */
   border: 1px solid #000;
   box-sizing: border-box;
 }
 
 #middle {
-  /* background-color: blue; */
   height: 71.53%;
 }
 
@@ -1336,7 +1174,6 @@ pre {
 }
 
 #middle-left {
-  /* background-color: brown; */
   width: 8.33%;
   height: 100%;
   float: left;
@@ -1352,28 +1189,21 @@ pre {
 
 #throw_dice {
   position: absolute;
-  /* margin-top: 40%; */
   background-color: rgb(15, 90, 90);
-  /* float: right; */
   right: 15%;
   bottom: 20%;
 }
 
 #middle-right {
-  /* background-color: rgb(233, 53, 62); */
   height: 100%;
   width: 8.33%;
   float: right;
 }
 
 #bottom {
-  /* background-color: rgb(7, 204, 194); */
   height: 14.285%;
   width: 100%;
-  /* position: sticky; */
-  /* float: inherit; */
   position: absolute;
-  /* margin-top: 40%; */
   bottom: 0;
 }
 
