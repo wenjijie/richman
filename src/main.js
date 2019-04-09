@@ -12,16 +12,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(new VueSocketIO({
   debug: true,
-  // connection: 'http://localhost:7008',
-  connection: 'http://richman.qiuluo.xin',
-  // connection: 'http://richman.qiuluo.xin/api',
-  // connection: 'http://richman.qiuluo.xin:7008',
-  vuex: {
-    // store,
-    // actionPrefix: 'SOCKET_',
-    // mutationPrefix: 'SOCKET_'
-  },
-  // options: { path: "/my-app/" } //Optional options
+  connection: 'http://localhost:7008',
 }))
 
 /* eslint-disable no-new */
