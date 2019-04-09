@@ -10,7 +10,7 @@
       </div>
       <div id="bg">
         <div id="top">
-          <div id="room-17" class="row-room"></div>
+          <div id="room-17" class="row-room" style="border-top-left-radius: 15px;"></div>
           <div id="room-18" class="row-room"></div>
           <div id="room-19" class="row-room"></div>
           <div id="room-20" class="row-room"></div>
@@ -21,7 +21,7 @@
           <div id="room-25" class="row-room"></div>
           <div id="room-26" class="row-room"></div>
           <div id="room-27" class="row-room"></div>
-          <div id="room-28" class="row-room"></div>
+          <div id="room-28" class="row-room" style="border-top-right-radius: 15px;"></div>
           <!-- <div class="row-room" style="color:blue">监狱</div> -->
         </div>
 
@@ -134,7 +134,7 @@
 
         <div id="bottom">
           <!-- <div class="row-room" style="color:blue">监狱</div> -->
-          <div id="room-11" class="row-room"></div>
+          <div id="room-11" class="row-room" style="border-bottom-left-radius: 15px;"></div>
           <div id="room-10" class="row-room"></div>
           <div id="room-9" class="row-room"></div>
           <div id="room-8" class="row-room"></div>
@@ -145,42 +145,37 @@
           <div id="room-3" class="row-room"></div>
           <div id="room-2" class="row-room"></div>
           <div id="room-1" class="row-room"></div>
-          <div id="room-0" class="row-room"></div>
+          <div id="room-0" class="row-room" style="border-bottom-right-radius: 15px;"></div>
         </div>
       </div>
     </div>
     
     <div id="info">
-      <div id="playerInfo" >
-        <!-- <div v-for="player in players" v-bind="player._id">
-          <div class="user">
-            <div class="userColor"></div>
-            <div class="userName">{{player.username}}</div>
-            <div class="money">{{player.money}}</div>
+      <div id="playerInfoBorder">
+        <div id="playerInfo" >
+          <table class="user">
+            <tr>
+              <th class="user-title"></th>
+              <th class="user-title">颜色</th>
+              <th class="user-title">昵称</th>
+              <th class="user-title">金钱</th>
+            </tr>
+            <tr v-for="(player, id) in players" :key="player._id">
+              <td><div v-if="id === currentRound" class="userColor" :style="'background-color:'+player.color"></div></td>
+              <td><div class="userColor" :style="'background-color:'+player.color"></div></td>
+              <td>{{player.username}}</td>
+              <td>{{player.money}}</td>
+            </tr>
+          </table>
+        </div> 
+      </div>
+      <div id="gameInfoBorder">
+        <div id="gameInfo">
+          <div id="console-wrapper">
+            <!-- <pre id="consoleText"></pre> -->
           </div>
-        </div> -->
-        <table class="user">
-          <tr>
-            <td class="user-title"></td>
-            <td class="user-title">颜色</td>
-            <td class="user-title">昵称</td>
-            <td class="user-title">金钱</td>
-          </tr>
-          <tr v-for="(player, id) in players" :key="player._id">
-            <th><div v-if="id === currentRound" class="userColor" :style="'background-color:'+player.color"></div></th>
-            <th><div class="userColor" :style="'background-color:'+player.color"></div></th>
-            <th class="userName">{{player.username}}</th>
-            <th class="money">{{player.money}}</th>
-          </tr>
-        </table>
-        <!-- <el-table :data="players">
-          <el-table-column label="颜色" align="center" prop="apiname"/>
-          <el-table-column label="名称" align="center" prop="username"/>
-          <el-table-column label="金钱" align="center" prop="money"/>
-        </el-table> -->
-      </div> 
-      <div id="gameInfo">
-        <pre id="console" style="margin: 0"></pre>
+          <!-- <pre id="console" style="margin: 0"></pre> -->
+        </div>
       </div>
     </div>
     <!-- 够买升级 -->
@@ -310,7 +305,8 @@ export default {
           msg.result === "run" ||
           msg.result === "buy" ||
           msg.result === "upgrade" ||
-          msg.result === "pay"
+          msg.result === "pay" ||
+          msg.result === "nothingToPay"
         ) {
           this.players[msg._id].area = msg.area;
           this.run(msg._id, msg.step);
@@ -321,6 +317,7 @@ export default {
               type: "warning",
               duration: 5 * 1000
             });
+            this.print("还没到你");
           }
         } else if (msg.result === "needSaleHouse") {
           this.players[msg._id].area = msg.area;
@@ -342,6 +339,9 @@ export default {
         console.log("area1: ", area);
         if (msg.result === "buy") {
           this.players[msg._id].money = msg.money;
+          this.print(
+            this.players[msg._id].username + " 够买了 " + msg.area.country
+          );
 
           area.style.backgroundColor = this.players[msg._id].color;
           let houseImg = document.createElement("img");
@@ -361,6 +361,9 @@ export default {
         } else if (msg.result === "upgrade") {
           this.players[msg._id].money = msg.money;
           // let room = document.getElementById("room-" + i);
+          this.print(
+            this.players[msg._id].username + " 升级了 " + msg.area.country
+          );
           let houseImg = document.createElement("img");
           houseImg.src = "/static/img/house.png";
           houseImg.style.width = "20%";
@@ -386,6 +389,7 @@ export default {
             type: "warning",
             duration: 5 * 1000
           });
+          this.print("金钱不足，无法够买" + msg.area.country);
         } else if (msg.result === "isBought") {
           Message({
             message: "已被人够买，不能再买",
@@ -398,6 +402,7 @@ export default {
             type: "warning",
             duration: 5 * 1000
           });
+          this.print("还没到你");
         }
         this.currentRound = msg.nextPlayer;
         // 轮到当前用户时投掷按钮可用
@@ -421,6 +426,7 @@ export default {
           type: "warning",
           duration: 5 * 1000
         });
+        this.print(this.players[msg._id].username + " 破产了");
       });
 
       // 游戏开始消息
@@ -433,7 +439,7 @@ export default {
             duration: 5 * 1000
           });
           this.roomInfo.roomStatus = "游戏中";
-          // this.getRoomUsers();
+          this.print("游戏开始");
         }
       });
 
@@ -450,6 +456,9 @@ export default {
           type: "message",
           duration: 5 * 1000
         });
+        this.print(
+          msg.user.username + (msg.type === "join" ? " 加入游戏" : " 返回游戏")
+        );
       });
 
       // 倒计时
@@ -488,7 +497,12 @@ export default {
             type: "message",
             duration: 5 * 1000
           });
-          console.log("asdfsdf: ", this.players[msg._id]);
+          this.print(
+            msg.username +
+              " 出售了 " +
+              msg.area.country +
+              (msg.result == "place" ? "" : "的一间房子")
+          );
           this.players[msg._id].money = msg.money;
 
           let area = document.getElementById("room-" + msg.area.id);
@@ -505,7 +519,7 @@ export default {
               console.log("houseId: ", msg.area.id);
               // console.log("houseId: ", msg.area.id);
               if (this.saleDialog.areas[i].id === msg.area.id) {
-              // if (this.saleDialog.areas[i].id === msg.area.id) {
+                // if (this.saleDialog.areas[i].id === msg.area.id) {
                 this.saleDialog.areas.splice(i, 1);
               }
             }
@@ -525,7 +539,7 @@ export default {
 
             for (let i in this.saleDialog.areas) {
               if (this.saleDialog.areas[i].id === msg.area.id) {
-              // if (this.saleDialog.areas[i].id === msg.houseId) {
+                // if (this.saleDialog.areas[i].id === msg.houseId) {
                 this.saleDialog.areas[i].rank = Number(msg.area.rank) - 1;
               }
             }
@@ -536,6 +550,7 @@ export default {
             type: "error",
             duration: 5 * 1000
           });
+          this.print("这不是你的房子，不能出售");
         }
       });
 
@@ -594,6 +609,7 @@ export default {
           type: "message",
           duration: 5 * 1000
         });
+        this.print(text);
       });
 
       // 游戏结束
@@ -602,13 +618,17 @@ export default {
         Message({
           message: "游戏结束",
           type: "message",
-          duration: 7 * 1000
+          duration: 3 * 1000
         });
+        this.print("游戏结束");
 
         // 退回游戏大厅
         setTimeout(() => {
-          this.$router.push({ path: "/hall" });
-        }, 7000);
+          this.$router.push({
+            path: "/result",
+            query: { roomId: this.roomId }
+          });
+        }, 3);
       });
     },
     getCurrentPlayer() {
@@ -675,8 +695,8 @@ export default {
               player.style.width = "8.33%";
               player.style.height = "15%";
               player.style.position = "absolute";
-              player.style.left = this.players[pl].area.position.x+"%";
-              player.style.top = this.players[pl].area.position.y+"%";
+              player.style.left = this.players[pl].area.position.x + "%";
+              player.style.top = this.players[pl].area.position.y + "%";
               this.players[pl].position = this.players[pl].area.position;
               // player.style.left = "91.67%";
               // player.style.top = "85.815%";
@@ -790,7 +810,7 @@ export default {
       // let player = document.getElementById('player');
       // player.style = 'transform: translate(-200px,0px);';
 
-      console.log('id: ', userId, ' rrr: ', random)
+      console.log("id: ", userId, " rrr: ", random);
       let dice = document.getElementById("big-dice");
       let smallDice = document.getElementById("group2");
 
@@ -832,7 +852,11 @@ export default {
         let player = document.getElementById(userId);
         let step = this.players[userId].step;
         let end;
-        console.log('player postion: ', this.players[userId].position.x, this.players[userId].position.y)
+        console.log(
+          "player postion: ",
+          this.players[userId].position.x,
+          this.players[userId].position.y
+        );
         if (step >= 0 && step < 11) {
           end = this.players[userId].position.x - 8.33;
         } else if (step >= 11 && step < 17) {
@@ -842,8 +866,8 @@ export default {
         } else if (step >= 28 && step < 34) {
           end = this.players[userId].position.y + 14.285;
         }
-        console.log('step: ', step);
-        console.log('end: ', end);
+        console.log("step: ", step);
+        console.log("end: ", end);
         // 开始行走
         let timer = setInterval(() => {
           this.runStep(
@@ -874,12 +898,11 @@ export default {
         if (type === "dice") {
           // 轮到当前用户时投掷按钮可用
           if (
-            (this.diceMsg.result === "run" ||
-            this.diceMsg.result === "pay") &&
+            (this.diceMsg.result === "run" || this.diceMsg.result === "pay") &&
             this.currentPlayer === this.diceMsg.nextPlayer
           ) {
             // if (this.currentPlayer === this.diceMsg.nextPlayer) {
-              this.diceButton = false;
+            this.diceButton = false;
             // }
           }
 
@@ -920,16 +943,19 @@ export default {
                 this.players[
                   this.diceMsg.payFor
                 ].money += this.diceMsg.area.income[this.diceMsg.area.rank];
+                let text =
+                  this.players[this.diceMsg._id].username +
+                  " 付给 " +
+                  this.players[this.diceMsg.payFor].username +
+                  " " +
+                  this.diceMsg.area.income[this.diceMsg.area.rank];
                 Message({
-                  message:
-                    this.players[this.diceMsg._id].username +
-                    " 付给 " +
-                    this.players[this.diceMsg.payFor].username +
-                    " " +
-                    this.diceMsg.area.income[this.diceMsg.area.rank],
+                  message: text,
                   type: "message",
                   duration: 5 * 1000
                 });
+
+                this.prin(text);
               }
               // this.buyDialog.dialogVisible = true;
             } else if (
@@ -943,6 +969,11 @@ export default {
               this.tipDialog.dialogVisible = true;
               this.players[this.diceMsg._id].money += Number(
                 this.diceMsg.effect.effect
+              );
+              this.prin(
+                this.players[this.diceMsg._id].username +
+                  "抽到: " +
+                  this.diceMsg.effect.text
               );
 
               setTimeout(() => {
@@ -962,12 +993,20 @@ export default {
               this.saleDialog.moneyTextVisible = true;
               this.getCurrentAreas();
             }
+            let text =
+              "现金不足，请" +
+              this.players[this.diceMsg._id].username +
+              "在倒计时内卖出足够的房产向" +
+              this.players[this.diceMsg.payFor] +
+              "支付 " +
+              money +
+              " 元";
             Message({
-              message:
-                "现金不足，请在倒计时内卖出足够的房产支付 " + money + " 元",
+              message: text,
               type: "error",
               duration: 5 * 1000
             });
+            this.prin(text);
           } else if (this.diceMsg.result === "nothingToPay") {
             Message({
               message:
@@ -975,6 +1014,9 @@ export default {
               type: "warning",
               duration: 5 * 1000
             });
+            this.prin(
+              this.players[this.diceMsg.result._id].username + " 破产了"
+            );
           }
 
           if (this.diceMsg.throughStart) {
@@ -1109,6 +1151,21 @@ export default {
         roomId: this.roomId,
         id: row.id
       });
+    },
+    print(msg) {
+      // const con = document.querySelector('#console');
+      const con = document.getElementById("console-wrapper");
+      let time = new Date();
+      con.innerText +=
+        "[系统] " +
+        time.getHours() +
+        ":" +
+        time.getMinutes() +
+        ":" +
+        time.getSeconds() +
+        " " +
+        msg +
+        "\n";
     }
   }
 };
@@ -1156,16 +1213,48 @@ export default {
 }
 
 #info {
-  width: 15%;
+  width: 20%;
   height: 100%;
-  background-color: aqua;
 }
+/* table,table tr th, table tr td { border:1px solid #0094ff; } */
 
 #playerInfo {
   width: 100%;
-  height: 35%;
+  height: 100%;
   /* display: inline-block; */
-  background-color: azure;
+  background-color: #f9fff0;
+  border-radius: 10px;
+  /* border-color: #000; */
+}
+
+#playerInfoBorder {
+  width: 100%;
+  height: 35%;
+  padding: 3%;
+  box-sizing:border-box;
+  background-color: #b9835875;
+}
+
+#console-wrapper {
+  /* margin: auto; */
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
+  height: 90%;
+  background: #eee;
+  box-sizing:border-box;
+  font-size: 14px;
+  text-align: left;
+}
+
+#console {
+  width: 100%;
+  height: 100%;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .user {
@@ -1187,17 +1276,26 @@ export default {
   background-color: black;
 }
 
-.userName {
+/* .userName {
   float: left;
 }
 
 .money {
   float: right;
-}
+} */
 
 #gameInfo {
   width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  /* background-color: rgb(96, 170, 36); */
+}
+
+#gameInfoBorder {
+  width: 100%;
   height: 65%;
+  padding: 3%;
+  box-sizing:border-box;
   background-color: cadetblue;
 }
 
@@ -1207,11 +1305,13 @@ export default {
   width: 80%;
   margin: auto;
   position: relative;
+  border-radius: 15px;
 }
 
 #top {
   /* background-color: saddlebrown; */
   height: 14.285%;
+  /* border-top-left-radius: 10px; */
 }
 
 .row-room {

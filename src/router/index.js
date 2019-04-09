@@ -15,6 +15,11 @@ export default new Router({
       component: () => import('@/views/game'),
     },
     {
+      path: '/result',
+      component:() => import('@/views/gameResult')
+      // hidden: true
+    },
+    {
       path: '/hall',
       component:() => import('@/views/hall')
       // hidden: true
@@ -27,6 +32,11 @@ export default new Router({
     {
       path: '/login',
       component:() => import('@/views/login')
+      // hidden: true
+    },
+    {
+      path: '/persion',
+      component:() => import('@/views/persion')
       // hidden: true
     },
   ]

@@ -16,9 +16,15 @@ export default {
             data: data
         })
     },
-    current(data) {
+    current() {
         return request({
             url: base.apiConfig.user.current,
+            method: 'get'
+        })
+    },
+    getGameInfo(userId) {
+        return request({
+            url: base.apiConfig.user.getGameInfo + '/' + userId,
             method: 'get'
         })
     }

@@ -1,5 +1,12 @@
 <template>
   <div id="hallRoot">
+    <div id="barCan">
+      <div class="topBar">
+        <img id="persion" src="@/assets/img/我的.png" alt="个人中心" @click="persionInfo()">
+        <div id="name">{{user.username}}</div>
+      </div>
+    </div>
+    
     <div class="roomTable">
       <el-table
         :data="tableData"
@@ -41,11 +48,14 @@
               size="mini"
               v-if="scope.row.status === '等待'"
               @click="enterRoom(scope.$index, scope.row)">进入</el-button>
-              <el-button
+            <el-button
               size="mini"
-              v-else-if="scope.row.status === '游戏中'"
-              disabled
-              @click="enterRoom(scope.$index, scope.row)">进入</el-button>
+              v-else-if="scope.row.status === '游戏中' && scope.row.playerIds.split(',').indexOf(user._id) === -1"
+              disabled>进入</el-button>
+            <el-button
+              size="mini"
+              v-else-if="scope.row.status === '游戏中' && scope.row.playerIds.split(',').indexOf(user._id) !== -1"
+              @click="enterRoom(scope.$index, scope.row)">回到游戏</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -85,6 +95,7 @@
 
 <script>
 import game from "@/api/game";
+import user from "@/api/user";
 import { Message } from "element-ui";
 
 export default {
@@ -150,6 +161,7 @@ export default {
     return {
       createRoomDialogVisible: false,
       tableData: [],
+      user: {},
       newRoom: {
         name: "",
         initMoney: 0,
@@ -166,6 +178,19 @@ export default {
     };
   },
   mounted() {
+    // this.userId = localStorage.userId;
+    user
+      .current()
+      .then(res => {
+        if (res.errno === 1000) {
+          console.log("res: ", res);
+          this.user = res.data;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     game
       .getRooms()
       .then(res => {
@@ -178,9 +203,9 @@ export default {
         console.log(err);
       });
 
-    let sss = (document.getElementsByClassName('roomTable'))[0];
-    console.log('sss: ', sss);
-    console.log('hei: ', sss.offsetHeight);
+    let sss = document.getElementsByClassName("roomTable")[0];
+    console.log("sss: ", sss);
+    console.log("hei: ", sss.offsetHeight);
   },
   methods: {
     enterRoom(index, row) {
@@ -192,7 +217,7 @@ export default {
           if (res.errno === 1000 || res.errno === 1020) {
             this.$router.push({ path: "/", query: { roomId: row.roomId } });
             console.log("加入房间 ", res);
-          } else if (res.errno === 1050 || res.errno === 1052) {
+          } else if (res.errno === 1034 || res.errno === 1050 || res.errno === 1052) {
             console.log("52");
             Message({
               message: res.data,
@@ -223,12 +248,48 @@ export default {
           console.log(error);
         });
       this.createRoomDialogVisible = false;
+    },
+    persionInfo() {
+      this.$router.push({ path: "/persion" });
     }
   }
 };
 </script>
 
 <style>
+#barCan {
+  /* background-color: aquamarine; */
+  height: 10%;
+  width: 100%;
+}
+
+.topBar {
+  height: 50px;
+  width: 100%;
+  align-self: flex-start;
+  /* justify-self: flex-end; */
+  background-color: #d1d2d39c;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: fixed;
+  /* align-content: center; */
+  /* flex-direction: column-reverse; */
+}
+
+#name {
+  float: right;
+  margin-right: 12px;
+  margin-top: 12px;
+}
+
+#persion {
+  float: right;
+  height: 80%;
+  margin-top: 3px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
 #hallRoot {
   height: 100%;
   width: 100%;
@@ -239,13 +300,14 @@ export default {
 }
 
 #createRoom {
+  height: 5%;
   margin: 10px;
   float: right;
 }
 
 .roomTable {
   width: 80%;
-  height: 80%;
+  height: 85%;
   overflow: hidden;
 }
 </style>

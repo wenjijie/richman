@@ -8,6 +8,7 @@ const apiConfig = {
     signup: '/signup',
     login: '/login',
     current: '/user/current',
+    getGameInfo: '/user/getGameInfo',
   },
   game: {
     getRoom: '/game/getRoom',
@@ -16,6 +17,7 @@ const apiConfig = {
     joinRoom: '/game/joinRoom',
     startGame: '/game/startGame',
     getCurrentAreas: '/game/getCurrentAreas',
+    getGameResult: '/game/getGameResult',
   }
 }
 export default {

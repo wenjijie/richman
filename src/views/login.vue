@@ -78,8 +78,7 @@ export default {
         .then(res => {
           if (res.errno === 1000) {
             localStorage.richman_token = res.data.token;
-            console.log("res: ", res);
-            console.log(localStorage);
+            localStorage.userId = res.data.user._id;
             this.$router.push({ path: "/hall" });
           } else {
             Message({

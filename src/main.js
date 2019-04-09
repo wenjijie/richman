@@ -12,8 +12,8 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: 'http://localhost:7008',
-  // connection: 'http://richman.qiuluo.xin',
+  // connection: 'http://localhost:7008',
+  connection: 'http://richman.qiuluo.xin',
   // connection: 'http://richman.qiuluo.xin/api',
   // connection: 'http://richman.qiuluo.xin:7008',
   vuex: {

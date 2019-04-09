@@ -38,5 +38,11 @@ export default {
             url: base.apiConfig.game.getCurrentAreas+'/'+roomId,
             method: 'get'
         })
+    },
+    getGameResult(roomId) {
+        return request({
+            url: base.apiConfig.game.getGameResult+'/'+roomId,
+            method: 'get'
+        })
     }
 }
