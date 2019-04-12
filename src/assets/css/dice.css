@@ -81,9 +81,6 @@
     border: 1px solid #E0E0E0;
 }
 
-/*开始设置每个面的角度，将6个面拼成一个正方体*/
-#page1 {}
-
 #page2 {
     transform-origin: right;
     /*点数为2的面以右边为转轴转动*/

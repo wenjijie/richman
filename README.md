@@ -4,7 +4,7 @@
 
 这是一个大富翁游戏项目的前端
 
-后端项目地址：<https://github.com/WhellingQ/richmanServe>
+后端项目地址：<https://github.com/wenjijie/richmanServe>
 
 demo体验地址：http://richman.qiuluo.xin
 
