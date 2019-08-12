@@ -160,11 +160,11 @@ export default {
       tableData: [],
       user: {},
       newRoom: {
-        name: "",
-        initMoney: 0,
+        name: "一起游戏吧",
+        initMoney: 10000,
         max: 2
       },
-      btnDisable: true,
+      btnDisable: false,
       validateRules: {
         name: [{ required: true, trigger: "blur", validator: validateName }],
         initMoney: [

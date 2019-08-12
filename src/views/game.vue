@@ -676,28 +676,36 @@ export default {
       }
     },
     startGame() {
-      game
-        .startGame(this.roomId)
-        .then(res => {
-          console.log("fanhui: ", res);
-          if (res.errno === 1000) {
-          } else if (res.errno === 1050) {
-            Message({
-              message: "游戏已经开始",
-              type: "error",
-              duration: 5 * 1000
-            });
-          } else if (res.errno === 1026) {
-            Message({
-              message: res.data,
-              type: "error",
-              duration: 5 * 1000
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
+      if (this.playerNum > 1){
+        game
+          .startGame(this.roomId)
+          .then(res => {
+            console.log("fanhui: ", res);
+            if (res.errno === 1000) {
+            } else if (res.errno === 1050) {
+              Message({
+                message: "游戏已经开始",
+                type: "error",
+                duration: 5 * 1000
+              });
+            } else if (res.errno === 1026) {
+              Message({
+                message: res.data,
+                type: "error",
+                duration: 5 * 1000
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }else {
+        Message({
+          message: "至少两个人才能开始游戏",
+          type: "warning",
+          duration: 5 * 1000
         });
+      }
     },
     throwDice() {
       this.$socket.emit("throwDice", {
